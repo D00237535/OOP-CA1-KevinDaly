@@ -59,5 +59,6 @@ public class VehicleManager {
     }
 
     //TODO add more functionality as per spec.
+    public vehicle
 
 }
