@@ -1,0 +1,3 @@
+101,John Smith,john.smith@gmail.com,042-1234567,53.9979,-6.4060
+102,Susan Boyle,sboyle@gmail.com,0044-54-287653,53.3456,-6.4246
+103,Joseph Bailey,jobal@yahoo.com,087-244322,53.5656,-7.0012
