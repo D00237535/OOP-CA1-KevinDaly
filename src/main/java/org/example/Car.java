@@ -21,7 +21,7 @@ public class Car extends Vehicle {
                String registration, double costPerMile,
                int year, int month, int day,
                int mileage, double latitude, double longitude,
-               int loadSpace) {
+               int capacity) {
 
         super(id, type, make, model, milesPerKwH,
                 registration, costPerMile,

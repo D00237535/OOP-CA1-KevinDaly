@@ -31,5 +31,14 @@ public class App {
         vehicleManager.displayAllVehicles();
 
         System.out.println("Program exiting... Goodbye");
+        String Reg = "151D987105";
+        Vehicle v = vehicleManager.FindValueByRegNumber(Reg);
+        if (v != null) {
+            System.out.println(v);
+        } else {
+            System.out.println("Vehicle not found");
+        }
+        System.out.println("Program exiting... Goodbye");
     }
 }
+

@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -24,7 +25,7 @@ public class VehicleManager {
 //           Delimiter: set the delimiter to be a comma character ","
 //                    or a carriage-return '\r', or a newline '\n'
             sc.useDelimiter("[,\r\n]+");
-
+            System.out.println(fileName);
             while (sc.hasNext()) {
                 int id = sc.nextInt();
                 String type = sc.next();  // vehicle type
@@ -39,7 +40,15 @@ public class VehicleManager {
                 int mileage = sc.nextInt();
                 double latitude = sc.nextDouble();  // Depot GPS location
                 double longitude = sc.nextDouble();
-                int loadSpace = sc.nextInt();
+                int capacity=0;
+                double loadSpace=0.0;
+
+                if (type.equalsIgnoreCase("Van") ||
+                        type.equalsIgnoreCase("Truck")) {
+                     loadSpace = sc.nextDouble();}
+
+                else{
+                    capacity = sc.nextInt();}
 
                 if (type.equalsIgnoreCase("Van") ||
                         type.equalsIgnoreCase("Truck")) {
@@ -48,20 +57,32 @@ public class VehicleManager {
                             registration, costPerMile,
                             year, month, day,
                             mileage, latitude, longitude,
-                            loadSpace));
+                             loadSpace));
+                } else if (type.equalsIgnoreCase("Car") ||
+                        type.equalsIgnoreCase("4X4")) {
+
+                    vehicleList.add(new Car(id, type, make, model, milesPerKwH,
+                            registration, costPerMile,
+                            year, month, day,
+                            mileage, latitude, longitude,
+                            capacity));
                 }
+                sc.close();
+
             }
-            sc.close();
 
         } catch (IOException e) {
             System.out.println("Exception thrown. " + e);
+
         }
+
+
+        //TODO add more functionality as per spec.
     }
 
-    //TODO add more functionality as per spec.
-    public Vehicle FindValueByRegNumber(String Reg) {
+    public Vehicle FindValueByRegNumber(String reg) {
         for (Vehicle v : vehicleList) {
-            if (v.getRegistration().equalsIgnoreCase(Reg)) {
+            if (v.getRegistration().equalsIgnoreCase(reg)) {
                 return v;
                 //System.out.println(v);
             }
@@ -69,5 +90,5 @@ public class VehicleManager {
 
         return null;
     }
-
 }
+
