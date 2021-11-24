@@ -2,8 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 
-public class BookingManager
-{
+public class BookingManager {
     private final ArrayList<Booking> bookingList;
     private PassengerStore passengerStore;
     private VehicleManager vehicleManager;
