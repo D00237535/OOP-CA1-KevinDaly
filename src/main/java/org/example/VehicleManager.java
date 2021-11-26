@@ -25,7 +25,6 @@ public class VehicleManager {
 //           Delimiter: set the delimiter to be a comma character ","
 //                    or a carriage-return '\r', or a newline '\n'
             sc.useDelimiter("[,\r\n]+");
-            System.out.println(fileName);
             while (sc.hasNext()) {
                 int id = sc.nextInt();
                 String type = sc.next();  // vehicle type
@@ -40,15 +39,15 @@ public class VehicleManager {
                 int mileage = sc.nextInt();
                 double latitude = sc.nextDouble();  // Depot GPS location
                 double longitude = sc.nextDouble();
-                int capacity=0;
-                double loadSpace=0.0;
+                int capacity = 0;
+                double loadSpace = 0.0;
 
                 if (type.equalsIgnoreCase("Van") ||
                         type.equalsIgnoreCase("Truck")) {
-                     loadSpace = sc.nextDouble();}
-
-                else{
-                    capacity = sc.nextInt();}
+                    loadSpace = sc.nextDouble();
+                } else {
+                    capacity = sc.nextInt();
+                }
 
                 if (type.equalsIgnoreCase("Van") ||
                         type.equalsIgnoreCase("Truck")) {
@@ -57,7 +56,7 @@ public class VehicleManager {
                             registration, costPerMile,
                             year, month, day,
                             mileage, latitude, longitude,
-                             loadSpace));
+                            loadSpace));
                 } else if (type.equalsIgnoreCase("Car") ||
                         type.equalsIgnoreCase("4X4")) {
 
@@ -67,10 +66,9 @@ public class VehicleManager {
                             mileage, latitude, longitude,
                             capacity));
                 }
-                sc.close();
 
             }
-
+            sc.close();
         } catch (IOException e) {
             System.out.println("Exception thrown. " + e);
 
@@ -90,5 +88,6 @@ public class VehicleManager {
 
         return null;
     }
+
 }
 

@@ -1,6 +1,8 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.Scanner;
 
 public class BookingManager {
     private final ArrayList<Booking> bookingList;
@@ -13,5 +15,8 @@ public class BookingManager {
     }
 
     //TODO implement functionality as per specification
+    public void createbooking(){
+        System.out.println("");
 
+    }
 }

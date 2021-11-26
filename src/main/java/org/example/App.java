@@ -18,6 +18,10 @@ package org.example;
  */
 
 public class App {
+
+    public void start() {
+
+}
     public static void main(String[] args) {
         System.out.println("\nWelcome to the VEHICLE BOOKINGS MANAGEMENT SYSTEM - CA1 for OOP\n");
 
@@ -30,7 +34,10 @@ public class App {
         System.out.println("List of all Vehicles:");
         vehicleManager.displayAllVehicles();
 
-        System.out.println("Program exiting... Goodbye");
+
+
+        System.out.println();
+        System.out.println("Finding vehicle with the reg 151D987105");
         String Reg = "151D987105";
         Vehicle v = vehicleManager.FindValueByRegNumber(Reg);
         if (v != null) {
@@ -40,5 +47,7 @@ public class App {
         }
         System.out.println("Program exiting... Goodbye");
     }
+
+
 }
 

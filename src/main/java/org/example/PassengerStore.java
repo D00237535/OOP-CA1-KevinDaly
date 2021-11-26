@@ -55,6 +55,15 @@ public class PassengerStore {
         }
     }
 
+    public Passenger findPassengerByName(String name) {
+        for (Passenger p : passengerList) {
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     // TODO - see functional spec for details of code to add
 
 } // end class
