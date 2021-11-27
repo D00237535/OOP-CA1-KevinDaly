@@ -1,0 +1,28 @@
+       System.out.println("\nWelcome to the VEHICLE BOOKINGS MANAGEMENT SYSTEM - CA1 for OOP\n");
+
+    // create PassengerStore and load it with passenger records from text file
+    PassengerStore passengerStore = new PassengerStore("passengers.txt");
+        System.out.println("List of all passengers:");
+        passengerStore.displayAllPassengers();
+
+    VehicleManager vehicleManager = new VehicleManager("vehicles.txt");
+        System.out.println("List of all Vehicles:");
+        vehicleManager.displayAllVehicles();
+
+
+
+        System.out.println();
+        System.out.println("Finding vehicle with the reg 151D987105");
+    String Reg = "151D987105";
+    Vehicle v = vehicleManager.FindValueByRegNumber(Reg);
+        if(v !=null)
+
+    {
+        System.out.println(v);
+    } else
+
+    {
+        System.out.println("Vehicle not found");
+    }
+        System.out.println("Program exiting... Goodbye");
+}
