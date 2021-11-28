@@ -3,6 +3,7 @@ package org.example;
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * This Vehicle Bookings Management Systems manages the booking of Vehicles
@@ -25,7 +26,7 @@ import java.util.Scanner;
 public class App {
     private static PassengerStore passengerStore;
     private static VehicleManager vehicleManager;
-    private static BookingManager bookingManager;
+    private static BookingManager BookingManager;
 
     public static void main(String[] args) {
         App app = new App();
@@ -47,14 +48,6 @@ public class App {
 
 
         vehicleManager.displayAllVehicles();
-
-
-        String registration = "172LH234106";
-        Vehicle vehicle = vehicleManager.FindValueByRegNumber(registration);
-        if (vehicle == null)
-            System.out.println("No vehicle with registration " + registration + " was found.");
-        else
-            System.out.println("Found Vehicle: " + vehicle.toString());
 
         // Create BookingManager and load all bookings from file
         // bookingManager = new BookingManager("bookings.txt");
@@ -86,16 +79,22 @@ public class App {
                 String usersInput = keyboard.nextLine();
                 option = Integer.parseInt(usersInput);
                 switch (option) {
+
                     case PASSENGERS:
                         System.out.println("Passengers option chosen");
                         displayPassengerMenu();
                         break;
+
                     case VEHICLES:
                         System.out.println("Vehicles option chosen");
+                        displayVehicleMenu();
                         break;
+
                     case BOOKINGS:
                         System.out.println("Bookings option chosen");
+                        displayBookingMenu();
                         break;
+
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
                         break;
@@ -116,15 +115,18 @@ public class App {
     // Sub-Menu for Passenger operations
     //
     private void displayPassengerMenu() {
+        int complete = 0;
         final String MENU_ITEMS = "\n*** PASSENGER MENU ***\n"
                 + "1. Show all Passengers\n"
                 + "2. Find Passenger by Name\n"
-                + "3. Exit\n"
+                + "3. Add a Passenger\n"
+                + "4. Exit\n"
                 + "Enter Option [1,3]";
 
         final int SHOW_ALL = 1;
         final int FIND_BY_NAME = 2;
-        final int EXIT = 3;
+        final int ADD_PASSENGER = 3;
+        final int EXIT = 4;
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -134,10 +136,12 @@ public class App {
                 String usersInput = keyboard.nextLine();
                 option = Integer.parseInt(usersInput);
                 switch (option) {
+
                     case SHOW_ALL:
                         System.out.println("Display ALL Passengers");
                         passengerStore.displayAllPassengers();
                         break;
+
                     case FIND_BY_NAME:
                         System.out.println("Find Passenger by Name");
                         System.out.println("Enter passenger name: ");
@@ -146,8 +150,14 @@ public class App {
                         if (p == null)
                             System.out.println("No passenger matching the name \"" + name + "\"");
                         else
-                            System.out.println("Found passenger: \n" + p.toString());
+                            System.out.println("Found passenger: \n" + p);
                         break;
+
+                    case ADD_PASSENGER:
+                        System.out.println("Add New Passenger\n");
+                        addNewPassenger();
+                        break;
+
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
                         break;
@@ -162,18 +172,69 @@ public class App {
         } while (option != EXIT);
 
     }
-    private void displayVehicleMenu(){
-        final String MENU_ITEMS = "\n*** PASSENGER MENU ***\n"
+
+    private void addNewPassenger() {
+        Pattern phoneRegex = Pattern.compile("^\\+?(\\d+-?)+$");
+        Pattern doubleRegex = Pattern.compile("^-?(\\d+)(?:\\.\\d+)?$");
+        Pattern emailRegex = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", Pattern.CASE_INSENSITIVE);
+        Scanner keyboard = new Scanner(System.in);
+        String name = "", email, phone, latitude, longitude;
+        boolean allowed = true;
+        do {
+            System.out.print("Please enter your name: ");
+            name = keyboard.nextLine();
+            allowed = name.length() > 1;
+            if (!allowed)
+                System.out.println("\nInvalid input!\n");
+        } while (!allowed);
+        do {
+            System.out.print("Please enter your email: ");
+            email = keyboard.nextLine();
+            allowed = emailRegex.matcher(email).find();
+            if (!allowed)
+                System.out.println("\nInvalid input!\n" + email + name);
+        } while (!allowed);
+        do {
+            System.out.print("Please enter your phone number: ");
+            phone = keyboard.nextLine();
+            allowed = phoneRegex.matcher(phone).find();
+            if (!allowed)
+                System.out.println("\nInvalid input!\n");
+        } while (!allowed);
+        do {
+            System.out.print("v latitude [-90 - 90]: ");
+            latitude = keyboard.nextLine();
+            allowed = doubleRegex.matcher(latitude).find() && (Double.parseDouble(latitude) >= -90 && Double.parseDouble(latitude) <= 90);
+            if (!allowed)
+                System.out.println("\nInvalid input!\n");
+        } while (!allowed);
+        do {
+            System.out.print("Please enter your longitude [-180 - 180]: ");
+            longitude = keyboard.nextLine();
+            allowed = doubleRegex.matcher(longitude).find() && (Double.parseDouble(longitude) >= -180 && Double.parseDouble(longitude) <= 180);
+            if (!allowed)
+                System.out.println("\nInvalid input!\n");
+        } while (!allowed);
+
+        System.out.println(passengerStore.addNewPassenger(name, email, phone, Double.parseDouble(latitude), Double.parseDouble(longitude)));
+    }
+
+    private void displayVehicleMenu() {
+        final String MENU_ITEMS = "\n*** VEHICLES MENU ***\n"
                 + "1. Show all Vehicles\n"
-                + "2. Find Vehicle by Model\n"
-                + "3. Find Vehicle by Make\n"
-                +" 4. Find Vehicle By"
-                + "3. Exit\n"
-                + "Enter Option [1,3]";
+                + "2. Find Vehicle by Make\n"
+                + "3. Find Vehicle by Model\n"
+                + "4. Find Vehicle By Reg No.\n"
+                + "5. Find Vehicle By Type\n"
+                + "6. Exit\n"
+                + "Enter Option [1,6]";
 
         final int SHOW_ALL = 1;
-        final int FIND_BY_NAME = 2;
-        final int EXIT = 3;
+        final int FIND_BY_MAKE = 2;
+        final int FIND_BY_MODEL = 3;
+        final int FIND_BY_REG_NO = 4;
+        final int FIND_BY_TYPE = 5;
+        final int EXIT = 6;
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -183,20 +244,56 @@ public class App {
                 String usersInput = keyboard.nextLine();
                 option = Integer.parseInt(usersInput);
                 switch (option) {
+
                     case SHOW_ALL:
-                        System.out.println("Display ALL Passengers");
-                        passengerStore.displayAllPassengers();
+                        System.out.println("Display ALL Vehicles");
+                        vehicleManager.displayAllVehicles();
                         break;
-                    case FIND_BY_NAME:
-                        System.out.println("Find Passenger by Name");
-                        System.out.println("Enter passenger name: ");
-                        String name = keyboard.nextLine();
-                        Passenger p = passengerStore.findPassengerByName(name);
-                        if (p == null)
-                            System.out.println("No passenger matching the name \"" + name + "\"");
+
+                    case FIND_BY_MAKE:
+                        System.out.println("Find Vehicle by Make");
+                        System.out.println("Enter Vehicle Make: ");
+                        String make = keyboard.nextLine();
+                        Vehicle v = vehicleManager.FindVehicleByMake(make);
+                        if (v == null)
+                            System.out.println("No Vehicle matching the make \"" + make + "\"");
                         else
-                            System.out.println("Found passenger: \n" + p.toString());
+                            System.out.println("Found Vehicle: \n" + v);
                         break;
+
+                    case FIND_BY_MODEL:
+                        System.out.println("Find Vehicle by Model");
+                        System.out.println("Enter Vehicle Model: ");
+                        String model = keyboard.nextLine();
+                        v = vehicleManager.FindVehicleByModel(model);
+                        if (v == null)
+                            System.out.println("No Vehicle matching the model \"" + model + "\"");
+                        else
+                            System.out.println("Found Vehicle: \n" + v);
+                        break;
+
+                    case FIND_BY_REG_NO:
+                        System.out.println("Find Vehicle by Registration");
+                        System.out.println("Enter Vehicle Registration: ");
+                        String reg = keyboard.nextLine();
+                        v = vehicleManager.FindVehicleByRegNumber(reg);
+                        if (v == null)
+                            System.out.println("No Vehicle matching the reg \"" + reg + "\"");
+                        else
+                            System.out.println("Found Vehicle: \n" + v);
+                        break;
+
+                    case FIND_BY_TYPE:
+                        System.out.println("Find Vehicle by Type");
+                        System.out.println("What Type of Vehicle would you like?: ");
+                        String type = keyboard.nextLine();
+                        v = vehicleManager.FindVehicleByType(type);
+                        if (v == null)
+                            System.out.println("No Vehicle matching the Type \"" + type + "\"");
+                        else
+                            System.out.println("Found Vehicle: \n" + v);
+                        break;
+
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
                         break;
@@ -211,5 +308,45 @@ public class App {
         } while (option != EXIT);
 
     }
+    private void displayBookingMenu() {
+        final String MENU_ITEMS = "\n*** BOOKING MENU ***\n"
+                + "1. Show all Bookings\n"
+                + "2. Find Booking by ...\n"
+                + "3. Find Booking by ...\n"
+                + "4. Exit\n"
+
+                + "Enter Option [1,4]";
+
+        final int SHOW_ALL = 1;
+        final int FIND_BY_ID = 2;
+        final int EXIT = 4;
+
+        Scanner keyboard = new Scanner(System.in);
+        int option = 0;
+        do {
+            System.out.println("\n" + MENU_ITEMS);
+            try {
+                String usersInput = keyboard.nextLine();
+                option = Integer.parseInt(usersInput);
+                switch (option) {
+                    case SHOW_ALL:
+                        System.out.println("Display ALL Bookings");
+                        BookingManager.displayAllBookings();
+                        break;
+                    case FIND_BY_ID:
+                        break;
+                    case EXIT:
+                        System.out.println("Exit Menu option chosen");
+                        break;
+                    default:
+                        System.out.print("Invalid option - please enter number in range");
+                        break;
+                }
+
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.print("Invalid option - please enter number in range");
+            }
+        } while (option != EXIT);
+
     }
 }

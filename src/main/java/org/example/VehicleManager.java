@@ -1,17 +1,21 @@
 package org.example;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class VehicleManager {
-    private final ArrayList<Vehicle> vehicleList;  // for Car and Van objects
+    final ArrayList<Vehicle> vehicleList;  // for Car and Van objects
 
     public VehicleManager(String fileName) {
         this.vehicleList = new ArrayList<>();
         loadVehiclesFromFile(fileName);
+    }
+
+    public ArrayList<Vehicle> getAllVehicles() {
+
+        return this.vehicleList;
     }
 
     public void displayAllVehicles() {
@@ -77,17 +81,40 @@ public class VehicleManager {
 
         //TODO add more functionality as per spec.
     }
-
-    public Vehicle FindValueByRegNumber(String reg) {
+    public Vehicle FindVehicleByMake(String make) {
         for (Vehicle v : vehicleList) {
-            if (v.getRegistration().equalsIgnoreCase(reg)) {
+            if (v.getMake().equalsIgnoreCase(make)) {
                 return v;
-                //System.out.println(v);
             }
         }
-
         return null;
     }
 
+    public Vehicle FindVehicleByModel(String model) {
+        for (Vehicle v : vehicleList) {
+            if (v.getModel().equalsIgnoreCase(model)) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    public Vehicle FindVehicleByRegNumber(String reg) {
+        for (Vehicle v : vehicleList) {
+            if (v.getRegistration().equalsIgnoreCase(reg)) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    public Vehicle FindVehicleByType(String type) {
+        for (Vehicle v : vehicleList) {
+            if (v.getType().equalsIgnoreCase(type)) {
+                return v;
+            }
+        }
+        return null;
+    }
 }
 
