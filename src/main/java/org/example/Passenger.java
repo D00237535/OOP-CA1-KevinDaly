@@ -51,37 +51,28 @@ public class Passenger {
     public int getId() {
         return id;
     }
-
     private void setId() {}; // prevents the id from being set (as it should only come from autogenerator)
-
     public String getName() {
         return name;
     }
-
     public LocationGPS getLocation() {
         return location;
     }
-
     public String getEmail() {
         return email;
     }
-
     public String getPhone() {
         return phone;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
     public void setLocation(double latitude, double longitude) {
         this.location = new LocationGPS(latitude, longitude);
     }

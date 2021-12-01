@@ -16,6 +16,7 @@ public class PassengerStore {
     }
 
     public List<Passenger> getAllPassengers() {
+
         return this.passengerList;
     }
 
@@ -54,6 +55,7 @@ public class PassengerStore {
             System.out.println("Exception thrown. " + e);
         }
     }
+    // TODO - see functional spec for details of code to add
 
     public Passenger findPassengerByName(String name) {
         for (Passenger p : passengerList) {
@@ -64,6 +66,16 @@ public class PassengerStore {
         return null;
     }
 
-    // TODO - see functional spec for details of code to add
+
+    public String addNewPassenger(String name, String email, String phone, double latitude, double longitude) {
+        for (Passenger p : this.passengerList) {
+            if (p.getName().toLowerCase().equals(name.toLowerCase()) &&
+                    p.getEmail().toLowerCase().equals(email.toLowerCase()))
+                return "\nPassenger " + name + " with email " + " is already stored";
+        }
+        Passenger newPassenger = new Passenger(name, email, phone, latitude, longitude);
+        this.passengerList.add(newPassenger);
+        return "\nPassenger \"" + name + "\" with email \"" + email + "\" has been added";
+    }
 
 } // end class
