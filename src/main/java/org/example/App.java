@@ -40,6 +40,8 @@ public class App {
         // create VehicleManager, and load all vehicles from text file
         vehicleManager = new VehicleManager("vehicles.txt");
 
+        BookingManager = new BookingManager("Booking.txt");
+
         try {
             displayMainMenu();        // User Interface - Menu
         } catch (IOException e) {
@@ -115,18 +117,19 @@ public class App {
     // Sub-Menu for Passenger operations
     //
     private void displayPassengerMenu() {
-        int complete = 0;
         final String MENU_ITEMS = "\n*** PASSENGER MENU ***\n"
                 + "1. Show all Passengers\n"
                 + "2. Find Passenger by Name\n"
                 + "3. Add a Passenger\n"
-                + "4. Exit\n"
-                + "Enter Option [1,3]";
+                + "4. Delete a Passenger\n"
+                + "5. Exit\n"
+                + "Enter Option [1,5]";
 
         final int SHOW_ALL = 1;
         final int FIND_BY_NAME = 2;
         final int ADD_PASSENGER = 3;
-        final int EXIT = 4;
+        final int DELETE_PASSENGER = 4;
+        final int EXIT = 5;
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -156,6 +159,17 @@ public class App {
                     case ADD_PASSENGER:
                         System.out.println("Add New Passenger\n");
                         addNewPassenger();
+                        break;
+
+                    case DELETE_PASSENGER:
+                        System.out.println("Delete a Passenger\n");
+                        System.out.println("Enter the passenger ID you want to delete: ");
+                        int passengerId = Integer.parseInt(keyboard.nextLine());
+                        p = passengerStore.deletePassenger(passengerId);
+                        if (p == null)
+                            System.out.println("No passenger matching the ID \"" + passengerId + "\"");
+                        else
+                            System.out.println("Passenger Deleted: \n" + p);
                         break;
 
                     case EXIT:
@@ -308,23 +322,24 @@ public class App {
         } while (option != EXIT);
 
     }
+
     private void displayBookingMenu() {
         final String MENU_ITEMS = "\n*** BOOKING MENU ***\n"
                 + "1. Show all Bookings\n"
-                + "2. Add a Booking"
-                + "3. Find Booking by ...\n"
-                + "4. Find Booking by ...\n"
-                + "5. Edit Booking Details"
-                + "6. Delete Booking"
+                + "2. Add a Booking\n"
+                + "3. Find Booking by Booking ID\n"
+                + "4. Find Booking by Passenger ID\n"
+                + "5. Find Booking by Vehicle ID\n"
+                + "6. Delete Booking\n"
                 + "7. Exit\n"
 
                 + "Enter Option [1,7]";
 
         final int SHOW_ALL = 1;
         final int ADD_BOOKING = 2;
-        final int FIND_BY_ID = 3;
-        final int FIND_BY_NAME = 4;
-        final int EDIT_BOOKING = 5;
+        final int FIND_BY_BOOKING_ID = 3;
+        final int FIND_BY_PASSENGER_ID = 4;
+        final int FIND_BY_VEHICLE_ID = 5;
         final int DELETE_BOOKING = 6;
         final int EXIT = 7;
 
@@ -340,12 +355,55 @@ public class App {
                         System.out.println("Display ALL Bookings");
                         BookingManager.displayAllBookings();
                         break;
+
                     case ADD_BOOKING:
-                        System.out.println("Add New Passenger\n");
+                        System.out.println("Add New Booking\n");
                         addNewBooking();
                         break;
 
-                    case FIND_BY_ID:
+                    case FIND_BY_BOOKING_ID:
+                        System.out.println("Find Booking by ID");
+                        System.out.println("Enter Booking ID: ");
+                        int bookingId = Integer.parseInt(keyboard.nextLine());
+                        Booking b = (Booking) BookingManager.FindBookingByID(bookingId);
+                        if (b == null)
+                            System.out.println("No Booking matching the chosen ID\"" + bookingId + "\"");
+                        else
+                            System.out.println("Found Booking: \n" + b);
+                        break;
+
+                    case FIND_BY_PASSENGER_ID:
+                        System.out.println("Find Booking by Passenger ID");
+                        System.out.println("Enter the Passenger ID for the booking: ");
+                        int passengerId = Integer.parseInt(keyboard.nextLine());
+                        b = (Booking) BookingManager.FindBookingByPassengerID(passengerId);
+                        if (b == null)
+                            System.out.println("No Booking matching the chosen ID\"" + passengerId + "\"");
+                        else
+                            System.out.println("Found Booking: \n" + b);
+                        break;
+
+                    case FIND_BY_VEHICLE_ID:
+                        System.out.println("Find Booking by Vehicle ID");
+                        System.out.println("Enter the Vehicle ID for the booking: ");
+                        int vehicleId = Integer.parseInt(keyboard.nextLine());
+                        b = (Booking) BookingManager.FindBookingByVehicleID(vehicleId);
+                        if (b == null)
+                            System.out.println("No Booking matching the chosen ID\"" + vehicleId + "\"");
+                        else
+                            System.out.println("Found Booking: \n" + b);
+                        break;
+
+                    case DELETE_BOOKING:
+                        System.out.println("Delete a Booking");
+                        System.out.println("Please enter the Booking ID for the booking you would like to Delete");
+                        bookingId = Integer.parseInt(keyboard.nextLine());
+                        b = BookingManager.deleteBooking(bookingId);
+                        if (b == null)
+                            System.out.println("No Booking matching the ID \"" + bookingId + "\"");
+                        else
+                            System.out.println("Booking Deleted: \n" + b);
+
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
@@ -361,6 +419,7 @@ public class App {
         } while (option != EXIT);
 
     }
+
     private void addNewBooking() {
         Pattern phoneRegex = Pattern.compile("^\\+?(\\d+-?)+$");
         Pattern doubleRegex = Pattern.compile("^-?(\\d+)(?:\\.\\d+)?$");

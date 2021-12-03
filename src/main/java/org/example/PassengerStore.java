@@ -65,6 +65,16 @@ public class PassengerStore {
         }
         return null;
     }
+    public Passenger deletePassenger(int passengerId){
+        Passenger pass = null;
+        for (Passenger p : passengerList) {
+            if (p.getId() == passengerId) {
+                pass = p;
+            }
+        }
+        passengerList.remove(pass);
+        return pass;
+    }
 
 
     public String addNewPassenger(String name, String email, String phone, double latitude, double longitude) {

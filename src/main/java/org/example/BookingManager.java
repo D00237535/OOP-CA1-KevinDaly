@@ -19,8 +19,8 @@ public class BookingManager {
 
     //TODO implement functionality as per specification
 
-    public void addBooking(int bookingId, int passengerId, int vehicleId,int year,
-                           int month, int day, int hour, int minute, int second,double latStart,
+    public void addBooking(int bookingId, int passengerId, int vehicleId, int year,
+                           int month, int day, int hour, int minute, int second, double latStart,
                            double longStart, double latEnd, double longEnd, double cost) {
 
         LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
@@ -82,12 +82,45 @@ public class BookingManager {
         }
     }
 
-    public void deleteBooking(int bId) {
+    public Booking deleteBooking(int bId) {
+        Booking book = null;
         for (Booking b : bookingList) {
             if (b.getBookingId() == bId) {
-                bookingList.remove(b);
-                break;
+                book = b;
             }
         }
+        bookingList.remove(book);
+        return book;
+    }
+
+    public Booking FindBookingByID(int bookingId) {
+        Booking book = null;
+        for (Booking b : bookingList) {
+            if (b.getBookingId() == bookingId) {
+                book = b;
+            }
+        }
+        bookingList.remove(book);
+        return book;
+    }
+
+    public Booking FindBookingByPassengerID(int passengerId) {
+        for (Booking b : bookingList) {
+            if (b.getPassengerId() == passengerId) {
+                return b;
+            }
+        }
+        return null;
+    }
+
+    public Booking FindBookingByVehicleID(int vehicleId) {
+        for (Booking b : bookingList) {
+            if (b.getVehicleId() == vehicleId) {
+                return b;
+            }
+        }
+        return null;
     }
 }
+
+

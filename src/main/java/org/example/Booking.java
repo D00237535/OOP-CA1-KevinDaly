@@ -1,6 +1,7 @@
 package org.example;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 class Booking
 {
@@ -80,5 +81,18 @@ class Booking
                 ", endLocation=" + endLocation +
                 ", cost=" + cost +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking booking = (Booking) o;
+        return bookingId == booking.bookingId && passengerId == booking.passengerId && vehicleId == booking.vehicleId && Double.compare(booking.cost, cost) == 0 && Objects.equals(bookingDateTime, booking.bookingDateTime) && Objects.equals(startLocation, booking.startLocation) && Objects.equals(endLocation, booking.endLocation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookingId, passengerId, vehicleId, bookingDateTime, startLocation, endLocation, cost);
     }
 }

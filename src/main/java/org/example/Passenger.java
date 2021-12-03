@@ -84,4 +84,17 @@ public class Passenger {
                 + email + ", phone=" + phone + ", location="
                 + location + "}";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Passenger passenger = (Passenger) o;
+        return id == passenger.id && Objects.equals(name, passenger.name) && Objects.equals(email, passenger.email) && Objects.equals(phone, passenger.phone) && Objects.equals(location, passenger.location) && Objects.equals(idGenerator, passenger.idGenerator);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, phone, location, idGenerator);
+    }
 }
