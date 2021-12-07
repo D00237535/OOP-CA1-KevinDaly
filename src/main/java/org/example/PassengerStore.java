@@ -87,5 +87,11 @@ public class PassengerStore {
         this.passengerList.add(newPassenger);
         return "\nPassenger \"" + name + "\" with email \"" + email + "\" has been added";
     }
-
-} // end class
+        public Passenger findPassengerById(int findId) {
+            for (Passenger p : passengerList)
+                if(p.getId() == findId) {
+                    return p;
+                }
+            return null;
+    }
+}

@@ -116,5 +116,8 @@ public class VehicleManager {
         }
         return null;
     }
+
+    public boolean findVehicleById(int vehicleId) {
+    }
 }
 

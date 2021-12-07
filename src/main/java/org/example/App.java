@@ -421,48 +421,132 @@ public class App {
     }
 
     private void addNewBooking() {
-        Pattern phoneRegex = Pattern.compile("^\\+?(\\d+-?)+$");
-        Pattern doubleRegex = Pattern.compile("^-?(\\d+)(?:\\.\\d+)?$");
-        Pattern emailRegex = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", Pattern.CASE_INSENSITIVE);
-        Scanner keyboard = new Scanner(System.in);
-        String name = "", email, phone, latitude, longitude;
-        boolean allowed = true;
-        do {
-            System.out.print("Please enter your name: ");
-            name = keyboard.nextLine();
-            allowed = name.length() > 1;
-            if (!allowed)
-                System.out.println("\nInvalid input!\n");
-        } while (!allowed);
-        do {
-            System.out.print("Please enter your email: ");
-            email = keyboard.nextLine();
-            allowed = emailRegex.matcher(email).find();
-            if (!allowed)
-                System.out.println("\nInvalid input!\n" + email + name);
-        } while (!allowed);
-        do {
-            System.out.print("Please enter your phone number: ");
-            phone = keyboard.nextLine();
-            allowed = phoneRegex.matcher(phone).find();
-            if (!allowed)
-                System.out.println("\nInvalid input!\n");
-        } while (!allowed);
-        do {
-            System.out.print("v latitude [-90 - 90]: ");
-            latitude = keyboard.nextLine();
-            allowed = doubleRegex.matcher(latitude).find() && (Double.parseDouble(latitude) >= -90 && Double.parseDouble(latitude) <= 90);
-            if (!allowed)
-                System.out.println("\nInvalid input!\n");
-        } while (!allowed);
-        do {
-            System.out.print("Please enter your longitude [-180 - 180]: ");
-            longitude = keyboard.nextLine();
-            allowed = doubleRegex.matcher(longitude).find() && (Double.parseDouble(longitude) >= -180 && Double.parseDouble(longitude) <= 180);
-            if (!allowed)
-                System.out.println("\nInvalid input!\n");
-        } while (!allowed);
 
-        System.out.println(passengerStore.addNewPassenger(name, email, phone, Double.parseDouble(latitude), Double.parseDouble(longitude)));
+        Scanner kb = new Scanner(System.in);
+        vehicleManager.displayAllVehicleId();
+        passengerStore.displayAllPassengerId();
+        try {
+            System.out.println("Enter Passenger ID");
+            int passengerId = kb.nextInt();
+            System.out.println("Enter Vehicle ID");
+            int vehicleId = kb.nextInt();
+            System.out.println("Enter Booking Year");
+            int year = kb.nextInt();
+            System.out.println("Enter Booking Month");
+            int month = kb.nextInt();
+            System.out.println("Enter Booking Day");
+            int day = kb.nextInt();
+            System.out.println("Enter Hour");
+            int hour = kb.nextInt();
+            System.out.println("Enter Minute");
+            int minute = kb.nextInt();
+            System.out.println("Enter Second");
+            int second = kb.nextInt();
+            System.out.println("Enter Start Latitude");
+            double latStart = kb.nextDouble();
+            System.out.println("Enter Start Longitude");
+            double longStart = kb.nextDouble();
+            System.out.println("Enter End Latitude");
+            double latEnd = kb.nextDouble();
+            System.out.println("Enter End Longitude");
+            double longEnd = kb.nextDouble();
+            System.out.println("Enter Cost");
+            double cost = kb.nextDouble();
+            if (passengerStore.findPassengerById(passengerId) == null) {
+                System.out.println("Passenger " + passengerId + " was not found");
+            } else if (vehicleManager.findVehicleById(vehicleId) == null) {
+                System.out.println("Vehicle " + vehicleId + " was not found");
+            } else {
+                boolean found = BookingManager.addBooking(passengerId, vehicleId, year, month, day, hour, minute, second, latStart, longStart, latEnd, longEnd, cost);
+                if (!found) {
+                    System.out.println("Booking was added");
+                } else {
+                    System.out.println("Booking already exists");
+                }
+            }
+
+        } catch (InputMismatchException | NumberFormatException e) {
+            System.out.print("Invalid option - please enter valid details");
+        }
+    }
+
+    public void editBookingMenu() {
+
+        Scanner kb = new Scanner(System.in);
+        System.out.println("Booking Ids");
+        displayAllBookingId();
+        System.out.println("Vehicle Ids");
+        vehicleManager.displayAllVehicleId();
+        System.out.println("Passenger Ids");
+        passengerStore.displayAllPassengerId();
+        System.out.println("Enter Booking ID to change");
+        int bookingId = kb.nextInt();
+        if (findBookingById(bookingId) != null) {
+            String MENU_ITEMS = "\n*** Edit Booking MENU ***\n"
+                    + "1. Edit Passenger\n"
+                    + "2. Edit Vehicle\n"
+                    + "3. Edit Year\n"
+                    + "4. Edit Month\n"
+                    + "5. Edit Day\n"
+                    + "6. Edit Hour\n"
+                    + "7. Edit Minute\n"
+                    + "8. Edit Seconds\n"
+                    + "9. Edit Start Longitude\n"
+                    + "10. Edit Start Latitude\n"
+                    + "11. Edit End Longitude\n"
+                    + "12. Edit End Latitude\n"
+                    + "13. Exit\n"
+                    + "Enter Option [1,13]";
+
+            final int EDIT_PASSENGER = 1;
+            final int EDIT_VEHICLE = 2;
+            final int EDIT_YEAR = 3;
+            final int EDIT_MONTH = 4;
+            final int EDIT_DAY = 5;
+            final int EDIT_HOUR = 6;
+            final int EDIT_MINUTE = 7;
+            final int EDIT_SECOND = 8;
+            final int EDIT_START_LONGITUDE = 9;
+            final int EDIT_START_LATITUDE = 10;
+            final int EDIT_END_LONGITUDE = 11;
+            final int EDIT_END_LATITUDE = 12;
+            final int EXIT = 13;
+
+            int option = 0;
+            do {
+                Booking b = findBookingById(bookingId);
+                System.out.println("\n" + MENU_ITEMS);
+                try {
+                    option = kb.nextInt();
+                    switch (option) {
+                        case EDIT_PASSENGER:
+                            System.out.println("Edit Passenger");
+                            int newPassengerId = kb.nextInt();
+                            b.setPassengerId(newPassengerId);
+                            System.out.println("Passenger Updated");
+                            break;
+                        case EDIT_VEHICLE:
+                            System.out.println("Edit Vehicle");
+                            int newVehicleId = kb.nextInt();
+                            b.setVehicleId(newVehicleId);
+                            System.out.println("Vehicle Updated");
+                            break;
+//                        case EDIT_YEAR:
+//                            System.out.println("Edit Year");
+//                            int newYear = kb.nextInt();
+//                            b.setBookingDateTime(new LocalDateTime.of(newYear, ));
+//                            System.out.println("Year Updated");
+//                            break;
+
+                        case EXIT:
+                            System.out.println("Exit Menu option chosen");
+                            break;
+                    }
+
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.out.print("Invalid option - please enter number in range");
+                }
+            } while (option != EXIT);
+        }
     }
 }
