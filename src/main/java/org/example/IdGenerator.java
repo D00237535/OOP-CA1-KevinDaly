@@ -71,10 +71,10 @@ public class IdGenerator {
         FileWriter fWriter = null;
         try {
             fWriter = new FileWriter(file);
-            fWriter.write(Integer.toString(nextId + 1));
+            fWriter.write(Integer.toString(nextId+1));
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }finally{
             //close resources
             try {
                 fWriter.close();

@@ -77,6 +77,8 @@ public class Passenger {
         this.location = new LocationGPS(latitude, longitude);
     }
 
+
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "{"
@@ -90,11 +92,11 @@ public class Passenger {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Passenger passenger = (Passenger) o;
-        return id == passenger.id && Objects.equals(name, passenger.name) && Objects.equals(email, passenger.email) && Objects.equals(phone, passenger.phone) && Objects.equals(location, passenger.location) && Objects.equals(idGenerator, passenger.idGenerator);
+        return Objects.equals(name, passenger.name) && Objects.equals(email, passenger.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, phone, location, idGenerator);
+        return Objects.hash(name, email);
     }
 }

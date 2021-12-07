@@ -80,7 +80,7 @@ public abstract class Vehicle
     {
         this.model = model;
     }
-    public double getMilesPerKm()
+    public double getMilesPerKwH()
     {
         return milesPerKwH;
     }
@@ -129,6 +129,7 @@ public abstract class Vehicle
     {
         this.type = type;
     }
+
 
     @Override
     public String toString()
