@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -14,6 +15,7 @@ public class BookingManager {
     private final ArrayList<Booking> bookingList;
     private PassengerStore passengerStore;
     private VehicleManager vehicleManager;
+    private IdGenerator idGenerator;
 
     // Constructor
     public BookingManager(String fileName, PassengerStore passengerStore, VehicleManager vehicleManager) {
@@ -64,17 +66,30 @@ public class BookingManager {
                         System.out.println("Find Booking by ID");
                         System.out.println("Enter Booking ID: ");
                         int findId = Integer.parseInt(keyboard.nextLine());
-                        findBookingById(findId);
-                        if (b == null)
+                        if (findBookingById(findId) == null)
                             System.out.println("No Booking matching the chosen ID\"" + findId + "\"");
                         else
-                            System.out.println("Found Booking: \n" + b);
+                            System.out.println("Found Booking: \n" + findBookingById(findId));
                         break;
 
                     case FIND_BOOKING_BY_PASSENGER_ID:
+                        System.out.println("Find Booking by Passenger ID");
+                        System.out.println("Enter Passenger ID: ");
+                        int findPId = Integer.parseInt(keyboard.nextLine());
+                        if (findBookingByPassengerId(findPId) == null)
+                            System.out.println("No Booking matching the chosen ID\"" + findPId + "\"");
+                        else
+                            System.out.println("Found Booking: \n" + findBookingByPassengerId(findPId));
                         break;
 
                     case FIND_BOOKING_BY_VEHICLE_ID:
+                        System.out.println("Find Booking by Vehicle ID");
+                        System.out.println("Enter Vehicle ID: ");
+                        int findVId = Integer.parseInt(keyboard.nextLine());
+                        if (findBookingByVehicleId(findVId) == null)
+                            System.out.println("No Booking matching the chosen ID\"" + findVId + "\"");
+                        else
+                            System.out.println("Found Booking: \n" + findBookingByVehicleId(findVId));
                         break;
 
                     case ADD_NEW_BOOKING:
@@ -184,41 +199,22 @@ public class BookingManager {
         return null;
     }
 
-    public Passenger findBookingByPassengerId(int findId) {
-        for (Passenger p : passengerList)
-            if(p.getId() == findId) {
+    public Passenger findBookingByPassengerId(int findPId) {
+        List<Passenger> list = passengerStore.getAllPassengers();
+        for (Passenger p : list)
+            if(p.getPassengerId() == findPId) {
                 return p;
             }
         return null;
     }
 
-    public Booking findBookingByVehicleId(int findId) {
-        for (Booking b : bookingList)
-            if (b.getBookingId() == findId) {
-                return b;
+    public Vehicle findBookingByVehicleId(int findVId) {
+        List<Vehicle> list = vehicleManager.g
+        for (Vehicle v : vehicleList)
+            if (v.getVId() == findVId) {
+                return v;
             }
         return null;
-    }
-
-    public void editBooking(int bookingId, int passengerId, int vehicleId, int year, int month, int day,
-                            double latStart, double longStart, double latEnd, double longEnd, double cost) {
-        boolean found = false;
-        for (Booking b : bookingList) {
-            if (b.getBookingId() == bookingId) {
-                found = true;
-                b.setPassengerId(passengerId);
-                b.setVehicleId(vehicleId);
-                b.setBookingDate(LocalDate.of(year, month, day));
-                b.setStartLocation(new LocationGPS(latStart, longStart));
-                b.setEndLocation(new LocationGPS(latEnd, longEnd));
-                break;
-            }
-
-        }
-        if (!found) {
-            System.out.println("not found");
-        }
-
     }
 
     public void deleteBooking(int bId) {
@@ -230,10 +226,10 @@ public class BookingManager {
         }
     }
 
-    public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day,
+    public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
                               double latStart, double longStart, double latEnd, double longEnd, double cost) {
 
-        LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
+        LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
         LocationGPS locationStart = new LocationGPS(latStart,longStart);
         LocationGPS locationEnd = new LocationGPS(latEnd,longEnd);
         Booking b1 = new Booking(passengerId, vehicleId, year, month, day, latStart, longStart, latEnd, longEnd, cost);
@@ -310,6 +306,24 @@ public class BookingManager {
         }
     }
 
+    public void editBooking(int bookingId, int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
+                            double latStart, double longStart, double latEnd, double longEnd, double cost) {
+        boolean found = false;
+        for (Booking b : bookingList) {
+            if (b.getBookingId() == bookingId) {
+                found = true;
+                b.setPassengerId(passengerId);
+                b.setVehicleId(vehicleId);
+                b.setBookingDate(LocalDate.of(year, month, day));
+                b.setStartLocation(new LocationGPS(latStart, longStart));
+                b.setEndLocation(new LocationGPS(latEnd, longEnd));
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("not found");
+        }
+    }
 
     public void editBookingMenu() {
 
@@ -375,18 +389,17 @@ public class BookingManager {
                             System.out.println("Vehicle Updated");
                             break;
 
-//                        case EDIT_YEAR:
-//                            System.out.println("Edit Year");
-//                            int newYear = kb.nextInt();
-//                            b.setBookingDateTime(new LocalDateTime.of(newYear, ));
-//                            System.out.println("Year Updated");
-//                            break;
+                        case EDIT_YEAR:
+                            System.out.println("Edit Year");
+                            int newYear = kb.nextInt();
+                            b.setBookingDateTime(new LocalDateTime.of(newYear, ));
+                            System.out.println("Year Updated");
+                            break;
 
                         case EXIT:
                             System.out.println("Exit Menu option chosen");
                             break;
                     }
-
                 }
                 catch (InputMismatchException | NumberFormatException e) {
                     System.out.print("Invalid option - please enter number in range");
@@ -395,5 +408,4 @@ public class BookingManager {
             while (option != EXIT);
         }
     }
-
 }

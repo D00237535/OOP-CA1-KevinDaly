@@ -17,10 +17,16 @@ public class VehicleManager {
         this.bookingManager = bookingManager;
         loadVehiclesFromFile(fileName);
     }
+
+    public List<Vehicle> getAllVehicles() {
+        return this.vehicleList;
+    }
+
     public void displayAllVehicles() {
         for (Vehicle v : vehicleList)
             System.out.println(v.toString());
     }
+
     public void displayAllVehicleId() {
         for (Vehicle v : vehicleList)
             System.out.println(v.getId());
@@ -75,62 +81,8 @@ public class VehicleManager {
         }
     }
 
-    public void saveVehiclesToFile(String fileName) {
-        try {
-            FileWriter vehicleWriter = new FileWriter(fileName);
-            for (Vehicle v : vehicleList) {
-
-                if (v instanceof Car) {
-                    vehicleWriter.write(
-                            v.getId() + "," +
-                                    v.getType() + "," +
-                                    v.getMake() + "," +
-                                    v.getModel() + ","
-                                    + v.getMilesPerKwH() + ","
-                                    + v.getRegistration() + ","
-                                    + v.getCostPerMile() + ","
-                                    + v.getLastServicedDate().getYear() + ","
-                                    + v.getLastServicedDate().getMonthValue() + ","
-                                    + v.getLastServicedDate().getDayOfMonth() + ","
-                                    + v.getMileage() + ","
-                                    + v.getDepotGPSLocation().getLatitude() + ","
-                                    + v.getDepotGPSLocation().getLongitude() + "," +
-                                    ((Car) v).getNumberOfSeats() +
-                                    "\n"
-                    );
-
-                } else if (v instanceof Van) {
-                    vehicleWriter.write(
-                            v.getId() + "," +
-                                    v.getType() + "," +
-                                    v.getMake() + "," +
-                                    v.getModel() + ","
-                                    + v.getMilesPerKwH() + ","
-                                    + v.getRegistration() + ","
-                                    + v.getCostPerMile() + ","
-                                    + v.getLastServicedDate().getYear() + ","
-                                    + v.getLastServicedDate().getMonthValue() + ","
-                                    + v.getLastServicedDate().getDayOfMonth() + ","
-                                    + v.getMileage() + ","
-                                    + v.getDepotGPSLocation().getLatitude() + ","
-                                    + v.getDepotGPSLocation().getLongitude() + "," +
-                                    ((Van) v).getLoadSpace() +
-                                    "\n"
-                    );
-
-                }
-            }
-            vehicleWriter.close();
-            System.out.println("The Vehicle has be written to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-
-    }
-
     //TODO add more functionality as per spec.
+
     public void displayVehicleMenu() {
         final String MENU_ITEMS = "\n*** VEHICLE MENU ***\n"
                 + "1. Show all Vehicles\n"
@@ -323,11 +275,9 @@ public class VehicleManager {
         } else {
             System.out.println("Enter Number of Seats");
             additional = keyboard.nextInt();
-
         }
 
         try {
-//fix incorrect casting
             addNewVehicle(type, make, model, milesPerKwH, registration, costPerMile, year, month, day, mileage, latitude, longitude, (int) additional);
             System.out.println("Vehicle added");
 
@@ -336,4 +286,55 @@ public class VehicleManager {
         }
     }
 
+    public void saveVehiclesToFile(String fileName) {
+        try {
+            FileWriter vehicleWriter = new FileWriter(fileName);
+            for (Vehicle v : vehicleList) {
+
+                if (v instanceof Car) {
+                    vehicleWriter.write(
+                            v.getId() + "," +
+                                    v.getType() + "," +
+                                    v.getMake() + "," +
+                                    v.getModel() + ","
+                                    + v.getMilesPerKwH() + ","
+                                    + v.getRegistration() + ","
+                                    + v.getCostPerMile() + ","
+                                    + v.getLastServicedDate().getYear() + ","
+                                    + v.getLastServicedDate().getMonthValue() + ","
+                                    + v.getLastServicedDate().getDayOfMonth() + ","
+                                    + v.getMileage() + ","
+                                    + v.getDepotGPSLocation().getLatitude() + ","
+                                    + v.getDepotGPSLocation().getLongitude() + "," +
+                                    ((Car) v).getNumberOfSeats() +
+                                    "\n"
+                    );
+
+                } else if (v instanceof Van) {
+                    vehicleWriter.write(
+                            v.getId() + "," +
+                                    v.getType() + "," +
+                                    v.getMake() + "," +
+                                    v.getModel() + ","
+                                    + v.getMilesPerKwH() + ","
+                                    + v.getRegistration() + ","
+                                    + v.getCostPerMile() + ","
+                                    + v.getLastServicedDate().getYear() + ","
+                                    + v.getLastServicedDate().getMonthValue() + ","
+                                    + v.getLastServicedDate().getDayOfMonth() + ","
+                                    + v.getMileage() + ","
+                                    + v.getDepotGPSLocation().getLatitude() + ","
+                                    + v.getDepotGPSLocation().getLongitude() + "," +
+                                    ((Van) v).getLoadSpace() +
+                                    "\n"
+                    );
+                }
+            }
+            vehicleWriter.close();
+            System.out.println("The Vehicle has be written to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
 }
