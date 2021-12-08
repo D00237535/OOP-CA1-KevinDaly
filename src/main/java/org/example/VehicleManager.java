@@ -18,7 +18,7 @@ public class VehicleManager {
         loadVehiclesFromFile(fileName);
     }
 
-    public List<Vehicle> getAllVehicles() {
+    public List<Vehicle> getAllVehicle() {
         return this.vehicleList;
     }
 

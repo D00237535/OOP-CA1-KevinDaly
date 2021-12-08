@@ -5,10 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class BookingManager {
@@ -199,17 +196,21 @@ public class BookingManager {
         return null;
     }
 
-    public Passenger findBookingByPassengerId(int findPId) {
-        List<Passenger> list = passengerStore.getAllPassengers();
-        for (Passenger p : list)
-            if(p.getPassengerId() == findPId) {
-                return p;
+    public ArrayList<Booking> findBookingByPassengerId(int id) {
+        ArrayList<Booking> bookings = new ArrayList<>();
+        System.out.println("Bookings with passenger id " + id + ":");
+        for (Booking b : bookingList) {
+            if (b.getPassengerId() == id) {
+                bookings.add(b);
             }
-        return null;
+        }
+        ComparatorBookingDateTime comp = new ComparatorBookingDateTime();
+        Collections.sort(bookings, comp);
+        return bookings;
     }
 
     public Vehicle findBookingByVehicleId(int findVId) {
-        List<Vehicle> list = vehicleManager.g
+        List<Vehicle> list = vehicleManager.getAllVehicle();
         for (Vehicle v : vehicleList)
             if (v.getVId() == findVId) {
                 return v;
@@ -227,12 +228,12 @@ public class BookingManager {
     }
 
     public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
-                              double latStart, double longStart, double latEnd, double longEnd, double cost) {
+                              double startLatitude, double startLongitude, double endLatitude, double endLongitude, double cost) {
 
         LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
-        LocationGPS locationStart = new LocationGPS(latStart,longStart);
-        LocationGPS locationEnd = new LocationGPS(latEnd,longEnd);
-        Booking b1 = new Booking(passengerId, vehicleId, year, month, day, latStart, longStart, latEnd, longEnd, cost);
+        LocationGPS locationStart = new LocationGPS(startLatitude,startLongitude);
+        LocationGPS locationEnd = new LocationGPS(endLatitude,endLongitude);
+        Booking b1 = new Booking(passengerId, vehicleId, year, month, day, startLatitude, startLongitude, endLatitude, endLongitude, cost);
         boolean found = false;
         for (Booking b : bookingList) {
             if (b.equals(b1)) {
@@ -293,7 +294,7 @@ public class BookingManager {
             }
 
             else {
-                boolean found = addBooking(passengerId, vehicleId, year, month, day, latStart, longStart, latEnd, longEnd, cost);
+                boolean found = addBooking(passengerId, vehicleId, year, month, day, hour, minute, latStart, longStart, latEnd, longEnd, cost);
                 if (!found) {
                     System.out.println("Booking was added");
                 } else {
