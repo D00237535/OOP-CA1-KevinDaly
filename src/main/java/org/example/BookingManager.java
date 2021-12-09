@@ -31,7 +31,7 @@ public class BookingManager {
                 + "3. Find Booking By Passenger ID\n"
                 + "4. Find Booking By Vehicle ID\n"
                 + "5. Edit Booking\n"
-                + "5. Delete Booking"
+                + "5. Delete Booking\n"
                 + "6. Add Booking\n"
                 + "7. Exit\n"
 
@@ -390,6 +390,7 @@ public class BookingManager {
 
                         case EDIT_PASSENGER:
                             System.out.println("Edit Passenger");
+                            System.out.println("Enter new Passenger ID:");
                             int newPassengerId = kb.nextInt();
                             b.setPassengerId(newPassengerId);
                             System.out.println("Passenger Updated");
@@ -397,6 +398,7 @@ public class BookingManager {
 
                         case EDIT_VEHICLE:
                             System.out.println("Edit Vehicle");
+                            System.out.println("Enter new Vehicle ID:");
                             int newVehicleId = kb.nextInt();
                             b.setVehicleId(newVehicleId);
                             System.out.println("Vehicle Updated");
@@ -404,6 +406,7 @@ public class BookingManager {
 
                         case EDIT_YEAR:
                             System.out.println("Edit Year");
+                            System.out.println("Enter new Year:");
                             int newYear = kb.nextInt();
                             b.setBookingDateTime(LocalDateTime.of(newYear, b.getBookingDateTime().getMonth(),
                                     b.getBookingDateTime().getDayOfMonth(), b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
@@ -412,6 +415,7 @@ public class BookingManager {
 
                         case EDIT_MONTH:
                             System.out.println("Edit Month");
+                            System.out.println("Enter new Month:");
                             int newMonth = kb.nextInt();
                             b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), newMonth,
                                     b.getBookingDateTime().getDayOfMonth(), b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
@@ -420,11 +424,62 @@ public class BookingManager {
 
                         case EDIT_DAY:
                             System.out.println("Edit Day");
+                            System.out.println("Enter new Day:");
                             int newDay = kb.nextInt();
                             b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), b.getBookingDateTime().getMonth(),
                                     newDay, b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
                             System.out.println("Day Updated");
                             break;
+
+                        case EDIT_HOUR:
+                            System.out.println("Edit Hour");
+                            System.out.println("Enter new Hour:");
+                            int newHour = kb.nextInt();
+                            b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), b.getBookingDateTime().getMonth(),
+                                    b.getBookingDateTime().getDayOfMonth(), newHour, b.getBookingDateTime().getMinute()));
+                            System.out.println("Day Updated");
+                            break;
+
+                        case EDIT_MINUTE:
+                            System.out.println("Edit Minute");
+                            System.out.println("Enter new Minute:");
+                            int newMinute = kb.nextInt();
+                            b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), b.getBookingDateTime().getMonth(),
+                                    b.getBookingDateTime().getDayOfMonth(), b.getBookingDateTime().getHour(), newMinute));
+                            System.out.println("Day Updated");
+                            break;
+
+//                        case EDIT_START_LONGITUDE:
+//                            System.out.println("Edit starting Longitude");
+//                            System.out.println("Enter new starting Longitude:");
+//                            double newStartLongitude = kb.nextDouble();
+//                            b.setStartLocation(newStartLongitude, b.getStartLocation().getLatitude());
+//                            System.out.println("Longitude Updated");
+//                            break;
+//
+//                        case EDIT_START_LATITUDE:
+//                            System.out.println("Edit starting Latitude");
+//                            System.out.println("Enter new starting Latitude:");
+//                            double newStartLatitude = kb.nextDouble();
+//                            b.setStartLocation(b.getStartLocation().getLongitude(), newStartLatitude);
+//                            System.out.println("Latitude Updated");
+//                            break;
+//
+//                        case EDIT_END_LONGITUDE:
+//                            System.out.println("Edit ending Longitude");
+//                            System.out.println("Enter new ending Latitude:");
+//                            double newEndLongitude = kb.nextDouble();
+//                            b.setStartLocation(b.getStartLocation().getLongitude(), newEndLongitude);
+//                            System.out.println("Longitude Updated");
+//                            break;
+//
+//                        case EDIT_END_LATITUDE:
+//                            System.out.println("Edit ending Latitude");
+//                            System.out.println("Enter new ending Latitude:");
+//                            double newEndLatitude = kb.nextDouble();
+//                            b.setStartLocation(b.getStartLocation().getLongitude(), newEndLatitude);
+//                            System.out.println("Latitude Updated");
+//                            break;
 
                         case EXIT:
                             System.out.println("Exit Menu option chosen");
