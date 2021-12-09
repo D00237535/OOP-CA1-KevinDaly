@@ -129,15 +129,17 @@ public class BookingManager {
                 int year = sc.nextInt();
                 int month = sc.nextInt();
                 int day = sc.nextInt();
-                double latStart = sc.nextDouble();
-                double longStart = sc.nextDouble();
-                double latEnd = sc.nextDouble();
-                double longEnd = sc.nextDouble();
+                int hour = sc.nextInt();
+                int minute = sc.nextInt();
+                double startLatitude = sc.nextDouble();
+                double startLongitude = sc.nextDouble();
+                double endLatitude = sc.nextDouble();
+                double endLongitude = sc.nextDouble();
                 double cost = sc.nextDouble();
 
                 // construct a Booking object and add it to the booking list
-                bookingList.add(new Booking(bookingId, passengerId, vehicleId, year, month, day,
-                        latStart, longStart, latEnd, longEnd, cost));
+                bookingList.add(new Booking(bookingId, passengerId, vehicleId, year, month, day, hour, minute,
+                        startLatitude, startLongitude, endLatitude, endLongitude, cost));
             }
             sc.close();
 
@@ -156,9 +158,11 @@ public class BookingManager {
                         b.getBookingId() + ","
                                 + b.getPassengerId() + ","
                                 + b.getVehicleId() + ","
-                                + b.getBookingDate().getYear() + ","
-                                + b.getBookingDate().getDayOfMonth() + ","
-                                + b.getBookingDate().getDayOfMonth() + ","
+                                + b.getBookingDateTime().getYear() + ","
+                                + b.getBookingDateTime().getMonthValue() + ","
+                                + b.getBookingDateTime().getDayOfMonth() + ","
+                                + b.getBookingDateTime().getHour() + ","
+                                + b.getBookingDateTime().getMinute() + ","
                                 + b.getStartLocation().getLatitude() + ","
                                 + b.getStartLocation().getLongitude() + ","
                                 + b.getEndLocation().getLatitude() + ","
@@ -209,13 +213,17 @@ public class BookingManager {
         return bookings;
     }
 
-    public Vehicle findBookingByVehicleId(int findVId) {
-        List<Vehicle> list = vehicleManager.getAllVehicle();
-        for (Vehicle v : vehicleList)
-            if (v.getVId() == findVId) {
-                return v;
+    public ArrayList<Booking> findBookingByVehicleId(int id) {
+        ArrayList<Booking> bookings = new ArrayList<>();
+        System.out.println("Bookings with passenger id " + id + ":");
+        for (Booking b : bookingList) {
+            if (b.getVehicleId() == id) {
+                bookings.add(b);
             }
-        return null;
+        }
+        ComparatorBookingDateTime comp = new ComparatorBookingDateTime();
+        Collections.sort(bookings, comp);
+        return bookings;
     }
 
     public void deleteBooking(int bId) {
@@ -233,7 +241,7 @@ public class BookingManager {
         LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
         LocationGPS locationStart = new LocationGPS(startLatitude,startLongitude);
         LocationGPS locationEnd = new LocationGPS(endLatitude,endLongitude);
-        Booking b1 = new Booking(passengerId, vehicleId, year, month, day, startLatitude, startLongitude, endLatitude, endLongitude, cost);
+        Booking b1 = new Booking(passengerId, vehicleId, year, month, day,hour, minute, startLatitude, startLongitude, endLatitude, endLongitude, cost);
         boolean found = false;
         for (Booking b : bookingList) {
             if (b.equals(b1)) {
@@ -269,6 +277,12 @@ public class BookingManager {
 
             System.out.println("Enter Booking Day");
             int day = kb.nextInt();
+
+            System.out.println("Enter Booking Hour");
+            int hour = kb.nextInt();
+
+            System.out.println("Enter Booking Minute");
+            int minute = kb.nextInt();
 
             System.out.println("Enter Start Latitude");
             double latStart = kb.nextDouble();
@@ -315,7 +329,7 @@ public class BookingManager {
                 found = true;
                 b.setPassengerId(passengerId);
                 b.setVehicleId(vehicleId);
-                b.setBookingDate(LocalDate.of(year, month, day));
+                b.setBookingDateTime(LocalDateTime.from(LocalDate.of(year, month, day)));
                 b.setStartLocation(new LocationGPS(latStart, longStart));
                 b.setEndLocation(new LocationGPS(latEnd, longEnd));
                 break;
@@ -337,7 +351,8 @@ public class BookingManager {
         passengerStore.displayAllPassengerId();
         System.out.println("Enter Booking ID to change");
         int bookingId = kb.nextInt();
-        if (findBookingById(bookingId) != null) {
+        Booking b = findBookingById(bookingId);
+        if (b != null) {
             String MENU_ITEMS = "\n*** Edit Booking MENU ***\n"
                     + "1. Edit Passenger\n"
                     + "2. Edit Vehicle\n"
@@ -346,13 +361,12 @@ public class BookingManager {
                     + "5. Edit Day\n"
                     + "6. Edit Hour\n"
                     + "7. Edit Minute\n"
-                    + "8. Edit Seconds\n"
-                    + "9. Edit Start Longitude\n"
-                    + "10. Edit Start Latitude\n"
-                    + "11. Edit End Longitude\n"
-                    + "12. Edit End Latitude\n"
-                    + "13. Exit\n"
-                    + "Enter Option [1,13]";
+                    + "8. Edit Start Longitude\n"
+                    + "9. Edit Start Latitude\n"
+                    + "10. Edit End Longitude\n"
+                    + "11. Edit End Latitude\n"
+                    + "12. Exit\n"
+                    + "Enter Option [1,12]";
 
             final int EDIT_PASSENGER = 1;
             final int EDIT_VEHICLE = 2;
@@ -361,16 +375,14 @@ public class BookingManager {
             final int EDIT_DAY = 5;
             final int EDIT_HOUR = 6;
             final int EDIT_MINUTE = 7;
-            final int EDIT_SECOND = 8;
-            final int EDIT_START_LONGITUDE = 9;
-            final int EDIT_START_LATITUDE = 10;
-            final int EDIT_END_LONGITUDE = 11;
-            final int EDIT_END_LATITUDE = 12;
-            final int EXIT = 13;
+            final int EDIT_START_LONGITUDE = 8;
+            final int EDIT_START_LATITUDE = 9;
+            final int EDIT_END_LONGITUDE = 10;
+            final int EDIT_END_LATITUDE = 11;
+            final int EXIT = 12;
 
             int option = 0;
             do {
-                Booking b = findBookingById(bookingId);
                 System.out.println("\n" + MENU_ITEMS);
                 try {
                     option = kb.nextInt();
@@ -393,8 +405,25 @@ public class BookingManager {
                         case EDIT_YEAR:
                             System.out.println("Edit Year");
                             int newYear = kb.nextInt();
-                            b.setBookingDateTime(new LocalDateTime.of(newYear, ));
+                            b.setBookingDateTime(LocalDateTime.of(newYear, b.getBookingDateTime().getMonth(),
+                                    b.getBookingDateTime().getDayOfMonth(), b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
                             System.out.println("Year Updated");
+                            break;
+
+                        case EDIT_MONTH:
+                            System.out.println("Edit Month");
+                            int newMonth = kb.nextInt();
+                            b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), newMonth,
+                                    b.getBookingDateTime().getDayOfMonth(), b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
+                            System.out.println("Month Updated");
+                            break;
+
+                        case EDIT_DAY:
+                            System.out.println("Edit Day");
+                            int newDay = kb.nextInt();
+                            b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), b.getBookingDateTime().getMonth(),
+                                    newDay, b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
+                            System.out.println("Day Updated");
                             break;
 
                         case EXIT:
