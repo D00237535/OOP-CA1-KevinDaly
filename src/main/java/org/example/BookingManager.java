@@ -12,6 +12,7 @@ public class BookingManager {
     private final ArrayList<Booking> bookingList;
     private PassengerStore passengerStore;
     private VehicleManager vehicleManager;
+    Email email = new Email();
     private IdGenerator idGenerator;
 
     // Constructor
@@ -31,19 +32,20 @@ public class BookingManager {
                 + "3. Find Booking By Passenger ID\n"
                 + "4. Find Booking By Vehicle ID\n"
                 + "5. Edit Booking\n"
-                + "5. Delete Booking"
+                + "5. Delete Booking\n"
                 + "6. Add Booking\n"
                 + "7. Exit\n"
 
-                + "Enter Option [1,7]";
+                + "Enter Option [1,8]";
 
         final int SHOW_ALL = 1;
         final int FIND_BY_BOOKING_ID = 2;
         final int FIND_BOOKING_BY_PASSENGER_ID = 3;
         final int FIND_BOOKING_BY_VEHICLE_ID = 4;
-        final int ADD_NEW_BOOKING= 5;
-        final int EDIT_BOOKING= 6;
-        final int EXIT = 7;
+        final int DELETE_BOOKING = 5;
+        final int ADD_NEW_BOOKING= 6;
+        final int EDIT_BOOKING= 7;
+        final int EXIT = 8;
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -88,6 +90,10 @@ public class BookingManager {
                         else
                             System.out.println("Found Booking: \n" + findBookingByVehicleId(findVId));
                         break;
+
+                    case DELETE_BOOKING:
+                        System.out.println("Delete Booking");
+
 
                     case ADD_NEW_BOOKING:
                         System.out.println("Add Bookings");
@@ -236,23 +242,25 @@ public class BookingManager {
     }
 
     public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
-                              double startLatitude, double startLongitude, double endLatitude, double endLongitude, double cost) {
+                              double startLatitude, double startLongitude,
+                              double endLatitude, double endLongitude, double cost) {
 
-        LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
-        LocationGPS locationStart = new LocationGPS(startLatitude,startLongitude);
-        LocationGPS locationEnd = new LocationGPS(endLatitude,endLongitude);
-        Booking b1 = new Booking(passengerId, vehicleId, year, month, day,hour, minute, startLatitude, startLongitude, endLatitude, endLongitude, cost);
-        boolean found = false;
-        for (Booking b : bookingList) {
-            if (b.equals(b1)) {
-                found = true;
-                break;
-            }
+
+        if (passengerStore.findPassengerById(passengerId) != null &&
+                vehicleManager.findVehicleById(vehicleId) != null) {
+
+            bookingList.add(new Booking(passengerId, vehicleId, year, month, day, hour, minute,
+                    startLatitude, startLongitude,
+                    endLatitude, endLongitude, cost));
+
+            System.out.println(email.sendReminderBookingMessage(passengerId, vehicleId, year, month, day, hour, minute,
+                    startLatitude, startLongitude,
+                    endLatitude, endLongitude, cost));
+
+        } else {
+            System.out.println("Cannot find passenger or vehicle on record!");
         }
-        if (!found) {
-            bookingList.add(b1);
-        }
-        return found;
+        return false;
     }
 
     public void addNewBooking() {
@@ -425,6 +433,56 @@ public class BookingManager {
                                     newDay, b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
                             System.out.println("Day Updated");
                             break;
+
+                        case EDIT_HOUR:
+                            System.out.println("Edit Hour");
+                            System.out.println("Enter new Hour:");
+                            int newHour = kb.nextInt();
+                            b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), b.getBookingDateTime().getMonth(),
+                                    b.getBookingDateTime().getDayOfMonth(), newHour, b.getBookingDateTime().getMinute()));
+                            System.out.println("Day Updated");
+                            break;
+
+                        case EDIT_MINUTE:
+                            System.out.println("Edit Minute");
+                            System.out.println("Enter new Minute:");
+                            int newMinute = kb.nextInt();
+                            b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), b.getBookingDateTime().getMonth(),
+                                    b.getBookingDateTime().getDayOfMonth(), b.getBookingDateTime().getHour(), newMinute));
+                            System.out.println("Day Updated");
+                            break;
+
+//                        case EDIT_START_LONGITUDE:
+//                            System.out.println("Edit starting Longitude");
+//                            System.out.println("Enter new starting Longitude:");
+//                            double newStartLongitude = kb.nextDouble();
+//                            b.setStartLocation(newStartLongitude, b.getStartLocation().getLatitude());
+//                            System.out.println("Longitude Updated");
+//                            break;
+//
+//                        case EDIT_START_LATITUDE:
+//                            System.out.println("Edit starting Latitude");
+//                            System.out.println("Enter new starting Latitude:");
+//                            double newStartLatitude = kb.nextDouble();
+//                            b.setStartLocation(b.getStartLocation().getLongitude(), newStartLatitude);
+//                            System.out.println("Latitude Updated");
+//                            break;
+//
+//                        case EDIT_END_LONGITUDE:
+//                            System.out.println("Edit ending Longitude");
+//                            System.out.println("Enter new ending Latitude:");
+//                            double newEndLongitude = kb.nextDouble();
+//                            b.setStartLocation(b.getStartLocation().getLongitude(), newEndLongitude);
+//                            System.out.println("Longitude Updated");
+//                            break;
+//
+//                        case EDIT_END_LATITUDE:
+//                            System.out.println("Edit ending Latitude");
+//                            System.out.println("Enter new ending Latitude:");
+//                            double newEndLatitude = kb.nextDouble();
+//                            b.setStartLocation(b.getStartLocation().getLongitude(), newEndLatitude);
+//                            System.out.println("Latitude Updated");
+//                            break;
 
                         case EXIT:
                             System.out.println("Exit Menu option chosen");
