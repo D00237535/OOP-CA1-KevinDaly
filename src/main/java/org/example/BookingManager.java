@@ -398,6 +398,7 @@ public class BookingManager {
 
                         case EDIT_PASSENGER:
                             System.out.println("Edit Passenger");
+                            System.out.println("Enter new Passenger ID:");
                             int newPassengerId = kb.nextInt();
                             b.setPassengerId(newPassengerId);
                             System.out.println("Passenger Updated");
@@ -405,6 +406,7 @@ public class BookingManager {
 
                         case EDIT_VEHICLE:
                             System.out.println("Edit Vehicle");
+                            System.out.println("Enter new Vehicle ID:");
                             int newVehicleId = kb.nextInt();
                             b.setVehicleId(newVehicleId);
                             System.out.println("Vehicle Updated");
@@ -412,6 +414,7 @@ public class BookingManager {
 
                         case EDIT_YEAR:
                             System.out.println("Edit Year");
+                            System.out.println("Enter new Year:");
                             int newYear = kb.nextInt();
                             b.setBookingDateTime(LocalDateTime.of(newYear, b.getBookingDateTime().getMonth(),
                                     b.getBookingDateTime().getDayOfMonth(), b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
@@ -420,6 +423,7 @@ public class BookingManager {
 
                         case EDIT_MONTH:
                             System.out.println("Edit Month");
+                            System.out.println("Enter new Month:");
                             int newMonth = kb.nextInt();
                             b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), newMonth,
                                     b.getBookingDateTime().getDayOfMonth(), b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
@@ -428,6 +432,7 @@ public class BookingManager {
 
                         case EDIT_DAY:
                             System.out.println("Edit Day");
+                            System.out.println("Enter new Day:");
                             int newDay = kb.nextInt();
                             b.setBookingDateTime(LocalDateTime.of(b.getBookingDateTime().getYear(), b.getBookingDateTime().getMonth(),
                                     newDay, b.getBookingDateTime().getHour(), b.getBookingDateTime().getMinute()));
