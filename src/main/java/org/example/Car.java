@@ -55,5 +55,12 @@ public class Car extends Vehicle
                 "} " + super.toString();
     }
 
+    @Override
+    public int getSeats() {
+        return 0;
+    }
 
+
+    public int getNumOfSeats() { return numberOfSeats;
+    }
 }

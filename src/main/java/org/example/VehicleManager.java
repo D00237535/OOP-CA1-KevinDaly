@@ -86,19 +86,17 @@ public class VehicleManager {
                 + "2. Find Vehicle by Type\n"
                 + "3. Find Vehicle by Registration\n"
                 + "4. Delete Passenger\n"
-                + "5. Edit Passenger\n"
-                + "6. Add Vehicle\n"
-                + "7. Exit\n"
+                + "5. Add Vehicle\n"
+                + "6. Exit\n"
 
-                + "Enter Option [1,5]";
+                + "Enter Option [1,6]";
 
         final int SHOW_ALL = 1;
         final int FIND_BY_TYPE = 2;
         final int FIND_BY_REGISTRATION = 3;
         final int DELETE_VEHICLE = 4;
-        final int EDIT_VEHICLE = 5;
-        final int ADD_NEW_VEHICLE = 6;
-        final int EXIT = 7;
+        final int ADD_NEW_VEHICLE = 5;
+        final int EXIT = 6;
 
         ArrayList<Vehicle> vehicles;
 
@@ -154,11 +152,6 @@ public class VehicleManager {
                             System.out.println("Booking Deleted: \n" + v);
                         break;
 
-                    case EDIT_VEHICLE:
-                        System.out.println("Edit Passenger");
-                        editVehicleMenu();
-                        break;
-
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
                         break;
@@ -210,6 +203,10 @@ public class VehicleManager {
         return vehicles;
     }
 
+
+    private void sortbyVehicleReg(ArrayList<Vehicle> vehicles) {
+    }
+
     public Vehicle deleteVehicle(int vId) {
         Vehicle drive = null;
         for (Vehicle v : vehicleList) {
@@ -221,61 +218,7 @@ public class VehicleManager {
         return drive;
     }
 
-    public void editPassengerMenu() {
-        Scanner kb = new Scanner(System.in);
-        System.out.println("Passenger Ids");
-        displayAllVehicles();
-        System.out.println("Enter Booking ID to change");
-        int VehicleId = kb.nextInt();
-        ArrayList<Vehicle> v = findVehicleById(VehicleId);
-        if (v != null) {
-            String MENU_ITEMS = "\n*** Edit Booking MENU ***\n"
-                    + "1. Edit Passenger\n"
-                    + "2. Edit Vehicle\n"
-                    + "3. Edit Year\n"
-                    + "4. Edit Month\n"
-                    + "5. Edit Day\n"
-                    + "6. Exit\n";
 
-            final int EDIT_NAME = 1;
-            final int EDIT_EMAIL = 2;
-            final int EDIT_PHONE = 3;
-            final int EDIT_LATITUDE = 4;
-            final int EDIT_LONGITUDE = 5;
-            final int EXIT = 6;
-
-            int option = 0;
-            do {
-                System.out.println("\n" + MENU_ITEMS);
-                try {
-                    option = kb.nextInt();
-                    switch (option) {
-
-                        case EDIT_NAME:
-                            System.out.println("Edit Passenger Name");
-                            System.out.println("Enter new Passenger Name:");
-                            String newPassengerName = kb.nextLine();
-                            p.setPassengerName(newPassengerName);
-                            System.out.println("Name Updated");
-                            break;
-
-                        case EDIT_EMAIL:
-                            System.out.println("Edit Passenger Email");
-                            System.out.println("Enter new Passenger Email:");
-                            String newPassengerEmail = kb.nextLine();
-                            p.setPassengerEmail(newPassengerEmail);
-                            System.out.println("Email Updated");
-                            break;
-                    }
-                }
-                catch (InputMismatchException | NumberFormatException e) {
-                    System.out.print("Invalid option - please enter number in range");
-                }
-            }
-            while (option != EXIT);
-        }
-
-    }
 
     public static class CarRegistrationComparator implements Comparator<Vehicle> {
 

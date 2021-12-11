@@ -197,11 +197,11 @@ public class PassengerStore {
         Passenger p = findPassengerById(PassengerId);
         if (p != null) {
             String MENU_ITEMS = "\n*** Edit Booking MENU ***\n"
-                    + "1. Edit Passenger\n"
-                    + "2. Edit Vehicle\n"
-                    + "3. Edit Year\n"
-                    + "4. Edit Month\n"
-                    + "5. Edit Day\n"
+                    + "1. Edit Name\n"
+                    + "2. Edit Email\n"
+                    + "3. Edit Phone\n"
+                    + "4. Edit Latitude\n"
+                    + "5. Edit Longitude\n"
                     + "6. Exit\n";
 
             final int EDIT_NAME = 1;

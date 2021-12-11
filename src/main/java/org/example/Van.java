@@ -52,4 +52,9 @@ public class Van extends Vehicle
                 "loadSpace=" + loadSpace +
                 "} " + super.toString();
     }
+
+    @Override
+    public int getSeats() {
+        return 0;
+    }
 }
