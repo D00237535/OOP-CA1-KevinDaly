@@ -3,7 +3,6 @@ package org.example;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 
 public class VehicleManager {
@@ -11,7 +10,7 @@ public class VehicleManager {
     private PassengerStore passengerStore;
     private BookingManager bookingManager;
 
-    public VehicleManager(String fileName, PassengerStore passengerStore, BookingManager bookingManager) {
+    public VehicleManager(String fileName) {
         this.vehicleList = new ArrayList<>();
         this.passengerStore = passengerStore;
         this.bookingManager = bookingManager;
@@ -53,16 +52,14 @@ public class VehicleManager {
                 int mileage = sc.nextInt();
                 double latitude = sc.nextDouble();  // Depot GPS location
                 double longitude = sc.nextDouble();
-                if(type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck"))
-                {
+                if (type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck")) {
                     double loadSpace = sc.nextDouble();
                     vehicleList.add(new Van(id, type, make, model, milesPerKwH,
                             registration, costPerMile,
                             year, month, day,
                             mileage, latitude, longitude,
                             loadSpace));
-                }
-                else if (type.equalsIgnoreCase("Car")) {
+                } else if (type.equalsIgnoreCase("Car")) {
                     int numberOfSeats = sc.nextInt();
 
                     // construct a Car object and add it to the passenger list
@@ -88,16 +85,20 @@ public class VehicleManager {
                 + "1. Show all Vehicles\n"
                 + "2. Find Vehicle by Type\n"
                 + "3. Find Vehicle by Registration\n"
-                + "4. Add Vehicle\n"
-                + "5. Exit\n"
+                + "4. Delete Passenger\n"
+                + "5. Edit Passenger\n"
+                + "6. Add Vehicle\n"
+                + "7. Exit\n"
 
                 + "Enter Option [1,5]";
 
         final int SHOW_ALL = 1;
         final int FIND_BY_TYPE = 2;
         final int FIND_BY_REGISTRATION = 3;
-        final int ADD_NEW_VEHICLE = 4;
-        final int EXIT = 5;
+        final int DELETE_VEHICLE = 4;
+        final int EDIT_VEHICLE = 5;
+        final int ADD_NEW_VEHICLE = 6;
+        final int EXIT = 7;
 
         ArrayList<Vehicle> vehicles;
 
@@ -122,7 +123,7 @@ public class VehicleManager {
 
                     case FIND_BY_TYPE:
                         System.out.println("Find Vehicles by Type");
-                        System.out.println("Enter Vehicle Type: ");
+                        System.out.println("Enter Vehicle Type:");
                         String type = keyboard.nextLine();
                         vehicles = findVehiclesByType(type);
                         if (vehicles == null)
@@ -133,13 +134,29 @@ public class VehicleManager {
 
                     case FIND_BY_REGISTRATION:
                         System.out.println("Find Vehicles by Registration");
-                        System.out.println("Enter Vehicle Registration: ");
+                        System.out.println("Enter Vehicle Registration:");
                         String registration = keyboard.nextLine();
                         vehicles = findVehiclesByRegistration(registration);
                         if (vehicles == null)
                             System.out.println("No Vehicles matching the registration \"" + registration + "\"");
                         else
                             System.out.println("Found Vehicle: \n" + vehicles);
+                        break;
+
+                    case DELETE_VEHICLE:
+                        System.out.println("Delete a Vehicle");
+                        System.out.println("Please enter the Vehicle ID for the vehicle you would like to Delete");
+                        int vehicleId = Integer.parseInt(keyboard.nextLine());
+                        Vehicle v = deleteVehicle(vehicleId);
+                        if (v == null)
+                            System.out.println("No Booking matching the ID \"" + vehicleId + "\"");
+                        else
+                            System.out.println("Booking Deleted: \n" + v);
+                        break;
+
+                    case EDIT_VEHICLE:
+                        System.out.println("Edit Passenger");
+                        editVehicleMenu();
                         break;
 
                     case EXIT:
@@ -157,8 +174,6 @@ public class VehicleManager {
 
     }
 
-
-
     CarRegistrationComparator registrationComparator = new CarRegistrationComparator();
 
     public ArrayList<Vehicle> findVehiclesByRegistration(String reg) {
@@ -171,6 +186,7 @@ public class VehicleManager {
         }
         return vehicles;
     }
+
     public ArrayList<Vehicle> findVehicleById(int findId) {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
 
@@ -194,6 +210,73 @@ public class VehicleManager {
         return vehicles;
     }
 
+    public Vehicle deleteVehicle(int vId) {
+        Vehicle drive = null;
+        for (Vehicle v : vehicleList) {
+            if (v.getId() == vId) {
+                drive = v;
+            }
+        }
+        vehicleList.remove(drive);
+        return drive;
+    }
+
+    public void editPassengerMenu() {
+        Scanner kb = new Scanner(System.in);
+        System.out.println("Passenger Ids");
+        displayAllVehicles();
+        System.out.println("Enter Booking ID to change");
+        int VehicleId = kb.nextInt();
+        ArrayList<Vehicle> v = findVehicleById(VehicleId);
+        if (v != null) {
+            String MENU_ITEMS = "\n*** Edit Booking MENU ***\n"
+                    + "1. Edit Passenger\n"
+                    + "2. Edit Vehicle\n"
+                    + "3. Edit Year\n"
+                    + "4. Edit Month\n"
+                    + "5. Edit Day\n"
+                    + "6. Exit\n";
+
+            final int EDIT_NAME = 1;
+            final int EDIT_EMAIL = 2;
+            final int EDIT_PHONE = 3;
+            final int EDIT_LATITUDE = 4;
+            final int EDIT_LONGITUDE = 5;
+            final int EXIT = 6;
+
+            int option = 0;
+            do {
+                System.out.println("\n" + MENU_ITEMS);
+                try {
+                    option = kb.nextInt();
+                    switch (option) {
+
+                        case EDIT_NAME:
+                            System.out.println("Edit Passenger Name");
+                            System.out.println("Enter new Passenger Name:");
+                            String newPassengerName = kb.nextLine();
+                            p.setPassengerName(newPassengerName);
+                            System.out.println("Name Updated");
+                            break;
+
+                        case EDIT_EMAIL:
+                            System.out.println("Edit Passenger Email");
+                            System.out.println("Enter new Passenger Email:");
+                            String newPassengerEmail = kb.nextLine();
+                            p.setPassengerEmail(newPassengerEmail);
+                            System.out.println("Email Updated");
+                            break;
+                    }
+                }
+                catch (InputMismatchException | NumberFormatException e) {
+                    System.out.print("Invalid option - please enter number in range");
+                }
+            }
+            while (option != EXIT);
+        }
+
+    }
+
     public static class CarRegistrationComparator implements Comparator<Vehicle> {
 
         public int compare(Vehicle v1, Vehicle v2) {
@@ -214,9 +297,8 @@ public class VehicleManager {
                     year, month, day,
                     mileage, latitude, longitude,
                     loadSpace));
-        }
-        else if (type.equalsIgnoreCase("Car") ||
-                type.equalsIgnoreCase("4x4")){// construct a Car object and add it to the passenger list
+        } else if (type.equalsIgnoreCase("Car") ||
+                type.equalsIgnoreCase("4x4")) {// construct a Car object and add it to the passenger list
             vehicleList.add(new Car(type, make, model, milesPerKwH,
                     registration, costPerMile,
                     year, month, day,
@@ -232,41 +314,41 @@ public class VehicleManager {
         Scanner keyboard = new Scanner(System.in);
 
         System.out.println("Enter Type:");
-            String type = keyboard.nextLine();
+        String type = keyboard.nextLine();
 
         System.out.println("Enter Make:");
-            String make = keyboard.nextLine();
+        String make = keyboard.nextLine();
 
         System.out.println("Enter Model:");
-            String model = keyboard.nextLine();
+        String model = keyboard.nextLine();
 
         System.out.println("Enter milesPerKwH");
-            String usersInput = keyboard.nextLine();
-            double milesPerKwH = Double.parseDouble(usersInput);
+        String usersInput = keyboard.nextLine();
+        double milesPerKwH = Double.parseDouble(usersInput);
 
         System.out.println("Enter Registration");
-            String registration = keyboard.nextLine();
+        String registration = keyboard.nextLine();
 
         System.out.println("Enter Cost Per Mile");
-            double costPerMile = keyboard.nextDouble();
+        double costPerMile = keyboard.nextDouble();
 
         System.out.println("Enter Last Service Year");
-            int year = keyboard.nextInt();
+        int year = keyboard.nextInt();
 
         System.out.println("Enter Last Service Month");
-            int month = keyboard.nextInt();
+        int month = keyboard.nextInt();
 
         System.out.println("Enter Last Service Day");
-            int day = keyboard.nextInt();
+        int day = keyboard.nextInt();
 
         System.out.println("Enter Mileage");
-            int mileage = keyboard.nextInt();
+        int mileage = keyboard.nextInt();
 
         System.out.println("Enter Latitude");
-            double latitude = keyboard.nextDouble();
+        double latitude = keyboard.nextDouble();
 
         System.out.println("Enter longitude");
-            double longitude = keyboard.nextDouble();
+        double longitude = keyboard.nextDouble();
 
 
         if (type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck")) {

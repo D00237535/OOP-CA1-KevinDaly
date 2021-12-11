@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -13,7 +14,7 @@ public class PassengerStore {
     private VehicleManager vehicleManager;
     private BookingManager bookingManager;
 
-    public PassengerStore(String fileName, VehicleManager vehicleManager, BookingManager bookingManager) {
+    public PassengerStore(String fileName) {
         this.passengerList = new ArrayList<>();
         this.vehicleManager = vehicleManager;
         this.bookingManager = bookingManager;
@@ -23,7 +24,6 @@ public class PassengerStore {
     public List<Passenger> getAllPassengers() {
         return this.passengerList;
     }
-
 
 
     /**
@@ -62,17 +62,21 @@ public class PassengerStore {
         final String MENU_ITEMS =
                 "\n*** PASSENGER MENU ***\n"
                         + "1. Show all Passengers\n"
-                        + "2. Add Passenger\n"
-                        + "3. Find Passenger by Name\n"
+                        + "2. Find Passenger By ID\n"
+                        + "3. Find Passenger By Name\n"
                         + "4. Delete Passenger\n"
-                        + "5. Exit\n"
-                        + "Enter Option [1,5]";
+                        + "5. Edit Passenger\n"
+                        + "6. Add Passenger\n"
+                        + "7. Exit\n"
+                        + "Enter Option [1,7]";
 
         final int SHOW_ALL = 1;
-        final int FIND_BY_NAME = 2;
-        final int DELETE_PASSENGER = 3;
-        final int ADD_PASSENGER = 4;
-        final int EXIT = 5;
+        final int FIND_BY_ID = 2;
+        final int FIND_BY_NAME = 3;
+        final int DELETE_PASSENGER = 4;
+        final int EDIT_PASSENGER = 5;
+        final int ADD_PASSENGER = 6;
+        final int EXIT = 7;
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -88,21 +92,23 @@ public class PassengerStore {
                         displayAllPassengers();
                         break;
 
-                    case ADD_PASSENGER:
-                        System.out.println("Add Passenger Chosen");
-                        addPassengerMenu();
-                        break;
-
+                    case FIND_BY_ID:
+                        System.out.println("Find Booking by Passenger ID");
+                        System.out.println("Enter Passenger ID: ");
+                        int findPId = Integer.parseInt(keyboard.nextLine());
+                        if (findPassengerById(findPId) == null)
+                            System.out.println("No Booking matching the chosen ID\"" + findPId + "\"");
+                        else
+                            System.out.println("Found Booking: \n" + findPassengerById(findPId));
 
                     case FIND_BY_NAME:
-                        System.out.println("Find Passenger by Name");
-                        System.out.println("Enter Passenger Name: ");
-                        String name = keyboard.nextLine();
-                        Passenger p = findPassengerByName(name);
-                        if (p == null)
-                            System.out.println("No passenger matching the name \"" + name + "\"");
+                        System.out.println("Find Booking by Passenger ID");
+                        System.out.println("Enter Passenger ID: ");
+                        String Name = (keyboard.nextLine());
+                        if (findPassengerByName(Name) == null)
+                            System.out.println("No Booking matching the chosen ID\"" + Name + "\"");
                         else
-                            System.out.println("Found Passenger: \n" + p);
+                            System.out.println("Found Booking: \n" + findPassengerByName(Name));
                         break;
 
                     case DELETE_PASSENGER:
@@ -115,6 +121,17 @@ public class PassengerStore {
                             deletePassenger(delName, delEmail);
                         }
                         break;
+
+                    case EDIT_PASSENGER:
+                        System.out.println("Edit Passenger");
+                        editPassengerMenu();
+                        break;
+
+                    case ADD_PASSENGER:
+                        System.out.println("Add Passenger Chosen");
+                        addPassengerMenu();
+                        break;
+
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
                         break;
@@ -136,15 +153,15 @@ public class PassengerStore {
             System.out.println(p.toString());
         }
     }
+
     public void displayAllPassengerId() {
         for (Passenger p : passengerList) {
             System.out.println(p.getId());
         }
     }
 
-    public void deletePassenger(String name, String email)
-    {
-        for(Passenger p: passengerList) {
+    public void deletePassenger(String name, String email) {
+        for (Passenger p : passengerList) {
             if (p.getName().equalsIgnoreCase(name) && p.getEmail().equalsIgnoreCase(email)) {
                 passengerList.remove(p);
                 break;
@@ -153,11 +170,10 @@ public class PassengerStore {
         }
 
     }
-    public void editPassenger(String name, String email, String phone,
-                              double latitude, double longitude)
-    {
+
+    public void editPassenger(String name, String email, String phone, double latitude, double longitude) {
         boolean found = false;
-        for(Passenger p: passengerList) {
+        for (Passenger p : passengerList) {
             if (p.getName().equalsIgnoreCase(name) && p.getEmail().equalsIgnoreCase(email)) {
                 found = true;
                 p.setName(name);
@@ -167,23 +183,106 @@ public class PassengerStore {
                 break;
             }
         }
-        if(!found)
-        {
+        if (!found) {
             System.out.println("not found");
         }
     }
 
+    public void editPassengerMenu() {
+        Scanner kb = new Scanner(System.in);
+        System.out.println("Passenger Ids");
+        displayAllPassengerId();
+        System.out.println("Enter Booking ID to change");
+        int PassengerId = kb.nextInt();
+        Passenger p = findPassengerById(PassengerId);
+        if (p != null) {
+            String MENU_ITEMS = "\n*** Edit Booking MENU ***\n"
+                    + "1. Edit Passenger\n"
+                    + "2. Edit Vehicle\n"
+                    + "3. Edit Year\n"
+                    + "4. Edit Month\n"
+                    + "5. Edit Day\n"
+                    + "6. Exit\n";
+
+            final int EDIT_NAME = 1;
+            final int EDIT_EMAIL = 2;
+            final int EDIT_PHONE = 3;
+            final int EDIT_LATITUDE = 4;
+            final int EDIT_LONGITUDE = 5;
+            final int EXIT = 6;
+
+            int option = 0;
+            do {
+                System.out.println("\n" + MENU_ITEMS);
+                try {
+                    option = kb.nextInt();
+                    switch (option) {
+
+                        case EDIT_NAME:
+                            System.out.println("Edit Passenger Name");
+                            System.out.println("Enter new Passenger Name:");
+                            String newPassengerName = kb.nextLine();
+                            p.setPassengerName(newPassengerName);
+                            System.out.println("Name Updated");
+                            break;
+
+                        case EDIT_EMAIL:
+                            System.out.println("Edit Passenger Email");
+                            System.out.println("Enter new Passenger Email:");
+                            String newPassengerEmail = kb.nextLine();
+                            p.setPassengerEmail(newPassengerEmail);
+                            System.out.println("Email Updated");
+                            break;
+
+                        case EDIT_PHONE:
+                            System.out.println("Edit Passenger Phone");
+                            System.out.println("Enter new Passenger Phone:");
+                            String newPassengerPhone = kb.nextLine();
+                            p.setPassengerPhone(newPassengerPhone);
+                            System.out.println("Phone Updated");
+                            break;
+
+                        case EDIT_LONGITUDE:
+                            System.out.println("Edit Passenger Longitude");
+                            System.out.println("Enter new starting Longitude:");
+                            double newLongitude = kb.nextDouble();
+                            p.setLocation(newLongitude, p.getLocation().getLatitude());
+                            System.out.println("Longitude Updated");
+                            break;
+
+                        case EDIT_LATITUDE:
+                            System.out.println("Edit Passenger Latitude");
+                            System.out.println("Enter new starting Latitude:");
+                            double newLatitude = kb.nextDouble();
+                            p.setLocation(p.getLocation().getLongitude(), newLatitude);
+                            System.out.println("Latitude Updated");
+                            break;
+
+                        case EXIT:
+                            System.out.println("Exit Menu option chosen");
+                            break;
+                    }
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.out.print("Invalid option - please enter number in range");
+                }
+            }
+            while (option != EXIT);
+        }
+
+    }
+
+
     public Passenger findPassengerByName(String Name) {
         for (Passenger p : passengerList)
-            if(p.getName().equalsIgnoreCase(Name)) {
+            if (p.getName().equalsIgnoreCase(Name)) {
                 return p;
             }
         return null;
     }
 
-    public Passenger findPassengerById(int findId) {
+    public Passenger findPassengerById(int findPId) {
         for (Passenger p : passengerList)
-            if(p.getId() == findId) {
+            if (p.getId() == findPId) {
                 return p;
             }
         return null;
@@ -193,19 +292,17 @@ public class PassengerStore {
 
 
     public boolean addPassenger(String name, String email, String phone,
-                                double latitude, double longitude)
-    {
-        Passenger P = new Passenger(name,email,phone,latitude,longitude);
+                                double latitude, double longitude) {
+        Passenger P = new Passenger(name, email, phone, latitude, longitude);
         boolean found = false;
-        for(Passenger p: passengerList) {
+        for (Passenger p : passengerList) {
             if (p.equals(P)) {
                 found = true;
                 break;
             }
 
         }
-        if(!found)
-        {
+        if (!found) {
             passengerList.add(P);
         }
         return found;

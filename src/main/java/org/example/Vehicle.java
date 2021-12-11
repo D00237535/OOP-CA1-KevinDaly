@@ -105,7 +105,9 @@ public abstract class Vehicle
         this.costPerMile = costPerMile;
     }
     public LocalDate getLastServicedDate() { return lastServicedDate; }
+
     public void setLastServicedDate(LocalDate lastServicedDate) { this.lastServicedDate = lastServicedDate; }
+
     public int getMileage()
     {
         return mileage;
@@ -130,7 +132,6 @@ public abstract class Vehicle
         this.type = type;
     }
 
-
     @Override
     public String toString()
     {
@@ -140,7 +141,5 @@ public abstract class Vehicle
                 + lastServicedDate + ", mileage=" + mileage + ", depotGPSLocation="
                 + depotGPSLocation + '}';
     }
-
-
-
 }
+

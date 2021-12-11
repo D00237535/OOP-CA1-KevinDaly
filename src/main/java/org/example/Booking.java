@@ -111,4 +111,6 @@ public class Booking {
     }
 
 
+    public void setStartLocation(double longitude, double newEndLatitude) {
+    }
 }

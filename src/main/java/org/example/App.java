@@ -19,13 +19,9 @@ public class App {
     public void start() {
 
         // create PassengerStore and load all passenger records from text file
-        passengerStore = new PassengerStore("passengers.txt", vehicleManager, bookingManager);
-
-        // create VehicleManager, and load all vehicles from text file
-        vehicleManager = new VehicleManager("vehicles.txt", passengerStore, bookingManager);
-
-        // create BookingManager, and load all bookings from text file
-        bookingManager = new BookingManager("bookings.txt",  passengerStore, vehicleManager);
+        passengerStore = new PassengerStore("passengers.txt");
+        vehicleManager = new VehicleManager("vehicles.txt");
+        bookingManager = new BookingManager("bookings.txt", passengerStore, vehicleManager);
 
 
         try {

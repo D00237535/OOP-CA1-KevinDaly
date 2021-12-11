@@ -32,9 +32,9 @@ public class BookingManager {
                 + "3. Find Booking By Passenger ID\n"
                 + "4. Find Booking By Vehicle ID\n"
                 + "5. Edit Booking\n"
-                + "5. Delete Booking\n"
-                + "6. Add Booking\n"
-                + "7. Exit\n"
+                + "6. Delete Booking\n"
+                + "7. Add Booking\n"
+                + "8. Exit\n"
 
                 + "Enter Option [1,8]";
 
@@ -92,8 +92,16 @@ public class BookingManager {
                         break;
 
                     case DELETE_BOOKING:
-                        System.out.println("Delete Booking");
+                        System.out.println("Delete a Booking");
+                        System.out.println("Please enter the Booking ID for the booking you would like to Delete");
+                        int bookingId = Integer.parseInt(keyboard.nextLine());
+                        Booking b = deleteBooking(bookingId);
+                        if (b == null)
+                            System.out.println("No Booking matching the ID \"" + bookingId + "\"");
+                        else
+                            System.out.println("Booking Deleted: \n" + b);
 
+                        break;
 
                     case ADD_NEW_BOOKING:
                         System.out.println("Add Bookings");
@@ -232,14 +240,16 @@ public class BookingManager {
         return bookings;
     }
 
-    public void deleteBooking(int bId) {
-        for (Booking b : bookingList) {
-            if (b.getBookingId() == bId) {
-                bookingList.remove(b);
-                break;
+        public Booking deleteBooking(int bId){
+            Booking book = null;
+            for (Booking b : bookingList) {
+                if (b.getBookingId() == bId) {
+                    book=b;
+                }
             }
+            bookingList.remove(book);
+            return book;
         }
-    }
 
     public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
                               double startLatitude, double startLongitude,
@@ -457,37 +467,37 @@ public class BookingManager {
                             System.out.println("Day Updated");
                             break;
 
-//                        case EDIT_START_LONGITUDE:
-//                            System.out.println("Edit starting Longitude");
-//                            System.out.println("Enter new starting Longitude:");
-//                            double newStartLongitude = kb.nextDouble();
-//                            b.setStartLocation(newStartLongitude, b.getStartLocation().getLatitude());
-//                            System.out.println("Longitude Updated");
-//                            break;
-//
-//                        case EDIT_START_LATITUDE:
-//                            System.out.println("Edit starting Latitude");
-//                            System.out.println("Enter new starting Latitude:");
-//                            double newStartLatitude = kb.nextDouble();
-//                            b.setStartLocation(b.getStartLocation().getLongitude(), newStartLatitude);
-//                            System.out.println("Latitude Updated");
-//                            break;
-//
-//                        case EDIT_END_LONGITUDE:
-//                            System.out.println("Edit ending Longitude");
-//                            System.out.println("Enter new ending Latitude:");
-//                            double newEndLongitude = kb.nextDouble();
-//                            b.setStartLocation(b.getStartLocation().getLongitude(), newEndLongitude);
-//                            System.out.println("Longitude Updated");
-//                            break;
-//
-//                        case EDIT_END_LATITUDE:
-//                            System.out.println("Edit ending Latitude");
-//                            System.out.println("Enter new ending Latitude:");
-//                            double newEndLatitude = kb.nextDouble();
-//                            b.setStartLocation(b.getStartLocation().getLongitude(), newEndLatitude);
-//                            System.out.println("Latitude Updated");
-//                            break;
+                        case EDIT_START_LONGITUDE:
+                            System.out.println("Edit starting Longitude");
+                            System.out.println("Enter new starting Longitude:");
+                            double newStartLongitude = kb.nextDouble();
+                            b.setStartLocation(newStartLongitude, b.getStartLocation().getLatitude());
+                            System.out.println("Longitude Updated");
+                            break;
+
+                        case EDIT_START_LATITUDE:
+                            System.out.println("Edit starting Latitude");
+                            System.out.println("Enter new starting Latitude:");
+                            double newStartLatitude = kb.nextDouble();
+                            b.setStartLocation(b.getStartLocation().getLongitude(), newStartLatitude);
+                            System.out.println("Latitude Updated");
+                            break;
+
+                        case EDIT_END_LONGITUDE:
+                            System.out.println("Edit ending Longitude");
+                            System.out.println("Enter new ending Latitude:");
+                            double newEndLongitude = kb.nextDouble();
+                            b.setStartLocation(b.getEndLocation().getLongitude(), newEndLongitude);
+                            System.out.println("Longitude Updated");
+                            break;
+
+                        case EDIT_END_LATITUDE:
+                            System.out.println("Edit ending Latitude");
+                            System.out.println("Enter new ending Latitude:");
+                            double newEndLatitude = kb.nextDouble();
+                            b.setStartLocation(b.getEndLocation().getLongitude(), newEndLatitude);
+                            System.out.println("Latitude Updated");
+                            break;
 
                         case EXIT:
                             System.out.println("Exit Menu option chosen");

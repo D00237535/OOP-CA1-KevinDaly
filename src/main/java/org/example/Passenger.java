@@ -101,4 +101,12 @@ public class Passenger {
     }
 
 
+    public void setPassengerName(String newPassengerName) {
+    }
+
+    public void setPassengerEmail(String newPassengerEmail) {
+    }
+
+    public void setPassengerPhone(String newPassengerPhone) {
+    }
 }
